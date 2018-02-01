@@ -76,7 +76,12 @@ include("connect.php");
                 </div>
                 <div class="col s12 m12 l12">
                     <?php
-                    $sel_kid = $_GET["kid"];
+                    if (isset($_GET["kid"])){
+                      $sel_kid = $_GET["kid"];
+                    }else {
+                      $sel_kid = 0;
+                    }
+                    // $sel_kid = $_GET["kid"];
                     //echo $somevar;
                     ?>
                     <table class="table">
@@ -206,7 +211,7 @@ include("connect.php");
                         }
                     });
                 });
-                
+
                                 // Onchange kerntaak beoordeling
                 $("select[name=kerntaak_option_beoordeling]").on('change', function () {
                     var kerntaak_id = this.value;
