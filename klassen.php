@@ -44,7 +44,7 @@ include("connect.php");
                 ?>
             </div>
             <div class="col s12 m8 l9">
-                <h4>Overzicht klassen <a data-target="ModalAddKlas" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
+                <h4>Overzicht klassen<a data-target="ModalAddKlas" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
                 <table id="show_klas" class="hide">
                     <thead>
                         <tr>
@@ -87,20 +87,16 @@ include("connect.php");
                             //alert(data);
                             $.each(data, function (index, element) {
                                 $("#show_klas").find('tbody')
-                                        .append($('<tr>', {id: element.klas_id}
-                                        ).append($('<td>', {
-                                            text: element.klas_name},
-                                        )).append($(
-                                                '<td><button data-target="ModalEditKlas" class="EditKlas btn-floating btn-large waves-effect waves-light yellow btn modal-trigger"><i class="material-icons" >edit</i></button>'
-                                                )).append($(
-                                                '<td><button data-target="ModalDeleteKlas" class="DeleteKlas btn-floating btn-large waves-effect waves-light red btn modal-trigger"><i class="material-icons">delete</i></button>'
-                                                ))
-
-                                                );
+                                    .append($('<tr>', {id: element.klas_id})
+                                        .append($('<td>', {text: element.klas_name},))
+                                        .append($('<td><a data-target="ModalEditKlas" class="EditKlas btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></a>'))
+                                        .append($('<td><a data-target="ModalDeleteKlas" class="DeleteKlas btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></a>'))
+                                    );
                                 $("#show_klas").removeClass("hide");
                             });
-                            $(".modal-trigger").leanModal();
                             
+                            // modal-trigger verandert naar modal-trigger2 zodat modal-trigger niet meerdere overlays creert.
+                            $(".modal-trigger2").leanModal();
                             // Edit button
                                 $(".EditKlas").on('click', function () {
                                     // waarde van het geselecteerde id ophalen
