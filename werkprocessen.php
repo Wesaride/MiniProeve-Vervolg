@@ -88,16 +88,16 @@ include("connect.php");
                                         ).append($('<td>', {
                                             text: element.name},
                                                 )).append($(
-                                                '<td><button data-target="ModalEditWerkproces" class="EditWerkproces btn-floating btn-large waves-effect waves-light yellow btn modal-trigger"><i class="material-icons" >edit</i></button>'
+                                                '<td><button data-target="ModalEditWerkproces" class="EditWerkproces btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'
                                                 )).append($(
-                                                '<td><button data-target="ModalDeleteWerkproces" class="DeleteWerkproces btn-floating btn-large waves-effect waves-light red btn modal-trigger"><i class="material-icons">delete</i></button>'
+                                                '<td><button data-target="ModalDeleteWerkproces" class="DeleteWerkproces btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'
                                                 ))
 
                                                 );
                                 //$('#show_klas').append($('<td>', {value: element.klas_id, text: element.name}, '</td>'));
                                 $("#show_werkproces").removeClass("hide");
                             });
-                                $(".modal-trigger").leanModal();
+                                $(".modal-trigger2").leanModal();
 
                             //Edit button Werkproces
                             $(".EditWerkproces").on('click', function () {

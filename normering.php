@@ -169,16 +169,16 @@ include("connect.php");
                                         ).append($('<td>', {
                                             text: element.criterium_normering_name},
                                                 )).append($(
-                                                '<td><button data-target="ModalEditNormering" class="EditNormering btn-floating btn-large waves-effect waves-light yellow btn modal-trigger"><i class="material-icons" >edit</i></button>'
+                                                '<td><button data-target="ModalEditNormering" class="EditNormering btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'
                                                 )).append($(
-                                                '<td><button data-target="ModalDeleteNormering" class="DeleteNormering btn-floating btn-large waves-effect waves-light red btn modal-trigger"><i class="material-icons">delete</i></button>'
+                                                '<td><button data-target="ModalDeleteNormering" class="DeleteNormering btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'
                                                 ))
 
                                                 );
                                 //$("select[name=criteria]").material_select();
                                 //$("select[name=selected_criteria]").show();
                                 $("table[id=show_normering]").removeClass("hide");
-                                $(".modal-trigger").leanModal();
+                                $(".modal-trigger2").leanModal();
                             });
                             // Edit normering
                             $(".EditNormering").on('click', function () {
