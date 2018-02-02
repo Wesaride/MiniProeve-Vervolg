@@ -157,15 +157,15 @@ include("connect.php");
                                             )).append($('<td>', {
                                                 text: element.student_email},
                                             )).append($(
-                                                    '<td><button data-target="ModalEditStudent" class="EditStudent btn-floating btn-large waves-effect waves-light yellow btn modal-trigger"><i class="material-icons" >edit</i></button>'
+                                                    '<td><button data-target="ModalEditStudent" class="EditStudent btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'
                                                     )).append($(
-                                                    '<td><button data-target="ModalDeleteStudent" class="DeleteStudent btn-floating btn-large waves-effect waves-light red btn modal-trigger"><i class="material-icons">delete</i></button>'
+                                                    '<td><button data-target="ModalDeleteStudent" class="DeleteStudent btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'
                                                     ))
 
                                                     );
                                     $("#show_student").removeClass("hide");
                                 });
-                                $(".modal-trigger").leanModal();
+                                $(".modal-trigger2").leanModal();
 
                                 // Edit button
                                 $(".EditStudent").on('click', function () {
