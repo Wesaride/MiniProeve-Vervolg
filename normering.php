@@ -165,30 +165,26 @@ include("connect.php");
                             $.each(data, function (index, element) {
                                 //console.log(element.criterium_id, element.criterium_naam);
                                 $("#show_normering").find('tbody')
-                                        .append($('<tr>', {id: element.criterium_normering_id}
-                                        ).append($('<td>', {
-                                            text: element.criterium_normering_name},
-                                                )).append($(
-                                                '<td><button data-target="ModalEditNormering" class="EditNormering btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'
-                                                )).append($(
-                                                '<td><button data-target="ModalDeleteNormering" class="DeleteNormering btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'
-                                                ))
-
-                                                );
+                                    .append($('<tr>', {id: element.criterium_normering_id})
+                                        .append($('<td>', {text: element.criterium_normering_name},))
+                                        .append($('<td><button data-target="ModalEditNormering" name="EditNormering" class="EditNormering btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'))
+                                        .append($('<td><button data-target="ModalDeleteNormering" name="DeleteNormering" class="DeleteNormering btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'))
+                                    );
                                 //$("select[name=criteria]").material_select();
                                 //$("select[name=selected_criteria]").show();
                                 $("table[id=show_normering]").removeClass("hide");
-                                $(".modal-trigger2").leanModal();
                             });
+                            $(".modal-trigger2").leanModal();
                             // Edit normering
                             $(".EditNormering").on('click', function () {
                                 // waarde van het geselecteerde id ophalen
                                 id_normering = $(this).parent().parent().attr('id');
                                 //alert(id_normering);
 
+
                                 // Velden leeg maken
                                 document.getElementById("normering_id").value = "";
-                                document.getElementById("normering_naam").value = "";
+                                document.getElementById("modal_normering_naam").value = "";
 
                                 // ophalen van informatie, met ajax om naam/omschrijving kerntaak op te halen
                                 $.ajax({
@@ -199,12 +195,12 @@ include("connect.php");
                                     success: function (data) {
                                         //console.log(data);
                                         $("#normering_id").val(data.id);
-                                        $("#normering_naam").val(data.name);
-                                        $("#normering_naam").removeClass("hide");
+                                        $("#modal_normering_naam").val(data.name);
+                                        $("#modal_normering_naam").removeClass("hide");
                                     },
                                 });
                             });
-
+                            
                             //DELETE normering
                             $(".DeleteNormering").on('click', function () {
                                 // ophalen van het id

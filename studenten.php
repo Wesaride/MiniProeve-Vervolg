@@ -151,18 +151,12 @@ include("connect.php");
                                 //alert(data);
                                 $.each(data, function (index, element) {
                                     $("#show_student").find('tbody')
-                                            .append($('<tr>', {id: element.student_id}
-                                            ).append($('<td>', {
-                                                text: element.student_name},
-                                            )).append($('<td>', {
-                                                text: element.student_email},
-                                            )).append($(
-                                                    '<td><button data-target="ModalEditStudent" class="EditStudent btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'
-                                                    )).append($(
-                                                    '<td><button data-target="ModalDeleteStudent" class="DeleteStudent btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'
-                                                    ))
-
-                                                    );
+                                        .append($('<tr>', {id: element.student_id})
+                                            .append($('<td>', {text: element.student_name},))
+                                            .append($('<td>', {text: element.student_email},))
+                                            .append($('<td><button data-target="ModalEditStudent" class="EditStudent btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'))
+                                            .append($('<td><button data-target="ModalDeleteStudent" class="DeleteStudent btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'))
+                                        );
                                     $("#show_student").removeClass("hide");
                                 });
                                 $(".modal-trigger2").leanModal();
