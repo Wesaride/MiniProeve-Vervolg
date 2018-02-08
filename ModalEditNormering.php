@@ -6,7 +6,7 @@
         <form method="POST">
             <i class="material-icons prefix tiny">mode_edit</i><label>Om een normeringswaarde aan te passen voert u hier de wijziging in:</label>
             <input type="hidden" class="form-control" style="border-radius: 0;" name="normering_id" id="normering_id">
-            <input type="text" class="form-control hide" style="border-radius: 0;" name="normering_naam" id="normering_naam" placeholder="Normering">
+            <input type="text" class="form-control hide" style="border-radius: 0;" name="normering_naam" id="modal_normering_naam" placeholder="Normering">
             <button type="submit" name="edit_normering_submit" class="btn btn-success" value="Opslaan">Opslaan</button>
             <a href="#!" class="modal-action modal-close waves-effect waves-green btn btn-success ">Sluiten</a>
         </form>

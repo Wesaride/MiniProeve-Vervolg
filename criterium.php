@@ -133,16 +133,11 @@ include("connect.php");
                             $.each(data, function (index, element) {
                                 //console.log(element.criterium_id, element.criterium_naam);
                                 $("#show_criterium").find('tbody')
-                                        .append($('<tr>', {id: element.criterium_id}
-                                        ).append($('<td>', {
-                                            text: element.criterium_naam},
-                                                )).append($(
-                                                '<td><button data-target="ModalEditCriterium" name="EditCriterium" class="EditCriterium btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'
-                                                )).append($(
-                                                '<td><button data-target="ModalDeleteCriterium" name="DeleteCriterium" class="DeleteCriterium btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'
-                                                ))
-
-                                                );
+                                    .append($('<tr>', {id: element.criterium_id})
+                                        .append($('<td>', {text: element.criterium_naam},))
+                                        .append($('<td><button data-target="ModalEditCriterium" name="EditCriterium" class="EditCriterium btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'))
+                                        .append($('<td><button data-target="ModalDeleteCriterium" name="DeleteCriterium" class="DeleteCriterium btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'))
+                                    );
                                 //$("select[name=criteria]").material_select();
                                 //$("select[name=selected_criteria]").show();
                                 $("table[id=show_criterium]").removeClass("hide");
