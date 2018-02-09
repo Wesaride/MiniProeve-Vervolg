@@ -57,6 +57,13 @@ include("connect.php");
 
                     </tbody>
                 </table>
+                <table id="geen_resultaten" class="hide">
+                    <thead>
+                        <tr>
+                            <th>Geen resultaten</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
         <!--EINDE CODE VOOR KLAS TOEVOEGEN BACKEND -->
@@ -93,46 +100,56 @@ include("connect.php");
                                         .append($('<td><a data-target="ModalDeleteKlas" class="DeleteKlas btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></a>'))
                                     );
                                 $("#show_klas").removeClass("hide");
+                                if (!$("table[id=geen_resultaten]").hasClass("hide")){
+                                    //als het "geen resultaten" scherm bestaat. Verstop het.
+                                    $("table[id=geen_resultaten]").addClass("hide");
+                                }
                             });
-                            
                             // modal-trigger verandert naar modal-trigger2 zodat modal-trigger niet meerdere overlays creert.
                             $(".modal-trigger2").leanModal();
                             // Edit button
-                                $(".EditKlas").on('click', function () {
-                                    // waarde van het geselecteerde id ophalen
-                                    id_klas = $(this).parent().parent().attr('id');
-                                    //console.log(id_student);
+                            $(".EditKlas").on('click', function () {
+                                // waarde van het geselecteerde id ophalen
+                                id_klas = $(this).parent().parent().attr('id');
+                                //console.log(id_student);
 
-                                    // Velden leeg maken
-                                    document.getElementById("klas_id").value = "";
-                                    document.getElementById("klas_naam").value = "";
+                                // Velden leeg maken
+                                document.getElementById("klas_id").value = "";
+                                document.getElementById("klas_naam").value = "";
 
-                                    // ophalen van informatie, met ajax om naam/omschrijving kerntaak op te halen
-                                    $.ajax({
-                                        type: 'GET',
-                                        url: 'json_edit_klas.php',
-                                        data: {id: id_klas},
-                                        dataType: 'json',
-                                        success: function (data) {
-                                            $("#klas_id").val(data.id);
-                                            $("#klas_naam").val(data.name);
-                                            $("#klas_naam").removeClass("hide");
-                                        },
-                                        error: function () {
-                                            console.log('error');
-                                        }
-                                    });
+                                // ophalen van informatie, met ajax om naam/omschrijving kerntaak op te halen
+                                $.ajax({
+                                    type: 'GET',
+                                    url: 'json_edit_klas.php',
+                                    data: {id: id_klas},
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        $("#klas_id").val(data.id);
+                                        $("#klas_naam").val(data.name);
+                                        $("#klas_naam").removeClass("hide");
+                                    },
+                                    error: function () {
+                                        console.log('error');
+                                    }
                                 });
-                                
-                                // DELETE BUTTON
-                                $(".DeleteKlas").on('click', function () {
-                                    // ophalen van het id
-                                    var klas_id = $(this).parent().parent().attr('id');
-                                    console.log(klas_id);
-                                    // link aanpassen
-                                    $("#delhref").attr("href", "delete_klas.php?id=" + klas_id);
-                                });
-                            
+                            });
+
+                            // DELETE BUTTON
+                            $(".DeleteKlas").on('click', function () {
+                                // ophalen van het id
+                                var klas_id = $(this).parent().parent().attr('id');
+                                console.log(klas_id);
+                                // link aanpassen
+                                $("#delhref").attr("href", "delete_klas.php?id=" + klas_id);
+                            });
+                        },
+                        error: function () {
+                            if (!$("table[id=show_klas]").hasClass("hide")){
+                                //haalt overzicht klas weg
+                                $("table[id=show_klas]").addClass("hide");
+                            }
+                            //laat "geen resultaten" tab zien
+                            $("table[id=geen_resultaten]").removeClass("hide");
                         }
                     });
                 });

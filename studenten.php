@@ -43,20 +43,27 @@ include("connect.php");
                 </select>
             </div>
             <div class="col s12 m8 l9">
-                <h4>Overzicht studenten <a data-target="ModalAddStudent" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h5>
-                    <table id="show_student" class="hide">
-                        <thead>
-                            <tr>
-                                <th>Studentnaam</th>
-                                <th>Emailadres</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody name="tbody">
+                <h4>Overzicht studenten <a data-target="ModalAddStudent" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
+                <table id="show_student" class="hide">
+                    <thead>
+                        <tr>
+                            <th>Studentnaam</th>
+                            <th>Emailadres</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody name="tbody">
 
-                        </tbody>
-                    </table>
+                    </tbody>
+                </table>
+                <table id="geen_resultaten" class="hide">
+                    <thead>
+                        <tr>
+                            <th>Geen resultaten</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
 
@@ -95,6 +102,10 @@ include("connect.php");
                                     text: element.klas_name
                                 }));
                             });
+                            if (!$("table[id=geen_resultaten]").hasClass("hide")){
+                                //als het "geen resultaten" scherm bestaat. Verstop het.
+                                $("table[id=geen_resultaten]").addClass("hide");
+                            }
                             $("select[name=klas_option]").removeClass("hide");
                             $("select[name=klas_option]").material_select();
                         }
@@ -129,7 +140,22 @@ include("connect.php");
                                 }));
                             });
                             $("select[name=selected_klas]").material_select();
+                            if (!$("table[id=geen_resultaten]").hasClass("hide")){
+                                //als het "geen resultaten" scherm bestaat. Verstop het.
+                                $("table[id=geen_resultaten]").addClass("hide");
+                            }
 
+                        },
+                        error: function () {
+                            if (!$("table[id=show_student]").hasClass("hide")){
+                                //haalt overzicht student weg
+                                $("table[id=show_student]").addClass("hide");
+                            }
+                            $("table[id=geen_resultaten]").removeClass("hide");
+
+                            if (!$("select[name=selected_klas]").closest('.select-wrapper').hasClass("hide")){
+                                $("select[name=selected_klas]").closest('.select-wrapper').addClass("hide");
+                            }
                         }
                     });
                 });
@@ -158,6 +184,10 @@ include("connect.php");
                                             .append($('<td><button data-target="ModalDeleteStudent" class="DeleteStudent btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'))
                                         );
                                     $("#show_student").removeClass("hide");
+                                    if (!$("table[id=geen_resultaten]").hasClass("hide")){
+                                        //als het "geen resultaten" scherm bestaat. Verstop het.
+                                        $("table[id=geen_resultaten]").addClass("hide");
+                                    }
                                 });
                                 $(".modal-trigger2").leanModal();
 
@@ -199,6 +229,17 @@ include("connect.php");
                                     // link aanpassen
                                     $("#delhref").attr("href", "delete_student.php?id=" + student_id);
                                 });
+                            },
+                            error: function () {
+                                if (!$("table[id=show_student]").hasClass("hide")){
+                                    //haalt overzicht student weg
+                                    $("table[id=show_student]").addClass("hide");
+                                }
+                                $("table[id=geen_resultaten]").removeClass("hide");
+                                
+                                if (!$("select[name=klas_option]").closest('.select-wrapper').hasClass("hide")){
+                                    $("select[name=klas_option]").closest('.select-wrapper').addClass("hide");
+                                }
                             }
                     });
                 });

@@ -65,6 +65,13 @@ include("connect.php");
 
                     </tbody>
                 </table>
+                <table id="geen_resultaten" class="hide">
+                    <thead>
+                        <tr>
+                            <th>Geen resultaten</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
 
@@ -111,6 +118,27 @@ include("connect.php");
                             $("select[name=selected_werkproces]").material_select();
                             // als alles is opgehaald. Select weer laten zien.
                             $("select[name=selected_werkproces]").closest('.select-wrapper').removeClass("hide");
+                            if (!$("table[id=geen_resultaten]").hasClass("hide")){
+                                //als het "geen resultaten" scherm bestaat. Verstop het.
+                                $("table[id=geen_resultaten]").addClass("hide");
+                            }
+                        },
+                        error: function () {
+                            //drop menu content is leeg
+                            //alert('error');
+                            //laat zien op de pagina dat er geen resultaten zijn
+                            if (!$("table[id=show_criterium]").hasClass("hide")){
+                                //haalt overzicht criterium weg
+                                $("table[id=show_criterium]").addClass("hide");
+                            }
+                            $("table[id=geen_resultaten]").removeClass("hide");
+                            //hide de andere dropdown menus
+                            if (!$("select[name=selected_werkproces]").closest('.select-wrapper').hasClass("hide")){
+                                $("select[name=selected_werkproces]").closest('.select-wrapper').addClass("hide");
+                            }
+                            //if (!$("select[name=selected_criteria]").closest('.select-wrapper').hasClass("hide")){
+                            //    $("select[name=selected_criteria]").closest('.select-wrapper').addClass("hide");
+                            //}
                         }
                     });
                 });
@@ -140,6 +168,10 @@ include("connect.php");
                                     );
                                 //$("select[name=criteria]").material_select();
                                 //$("select[name=selected_criteria]").show();
+                                if (!$("table[id=geen_resultaten]").hasClass("hide")){
+                                //als het "geen resultaten" scherm bestaat. Verstop het.
+                                $("table[id=geen_resultaten]").addClass("hide");
+                            }
                                 $("table[id=show_criterium]").removeClass("hide");
                             });
                             $(".modal-trigger2").leanModal();
@@ -167,7 +199,7 @@ include("connect.php");
                                         $("#criterium_id").val(data.id);
                                         $("#criterium_naam").val(data.name);
                                         $("#criterium_naam").removeClass("hide");
-                                    },
+                                    }
                                 });
                             });
 
@@ -180,6 +212,13 @@ include("connect.php");
                                 // link aanpassen
                                 $("#delhref").attr("href", "delete_criterium.php?id=" + werkproces_criterium_id);
                             });
+                        },
+                        error: function () {
+                            if (!$("table[id=show_criterium]").hasClass("hide")){
+                                //haalt overzicht normering weg
+                                $("table[id=show_criterium]").addClass("hide");
+                            }
+                            $("table[id=geen_resultaten]").removeClass("hide");
                         }
                     });
                 });
@@ -193,7 +232,7 @@ include("connect.php");
                     // Alles leeg maken:
                     $("select[name=werkproces_criterium_option]").empty().append($('<option>', {
                         value: 0,
-                        text: "Kies een werkproces",
+                        text: "Kies een werkproces"
                     }));
 
                     // ophalen van informatie, met ajax

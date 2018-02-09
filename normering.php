@@ -51,14 +51,18 @@ include("connect.php");
                     <thead>
                         <tr>
                             <th>Normering</th>
-                            <th></th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody name="tbody">
 
-
                     </tbody>
+                </table>
+                <table id="geen_resultaten" class="hide">
+                    <thead>
+                        <tr>
+                            <th>Geen resultaten</th>
+                        </tr>
+                    </thead>
                 </table>
 
 
@@ -112,6 +116,27 @@ include("connect.php");
                             $("select[name=selected_criteria]").material_select();
                             // als alles is opgehaald. Select weer laten zien.
                             $("select[name=selected_werkproces]").closest('.select-wrapper').removeClass("hide");
+                            if (!$("table[id=geen_resultaten]").hasClass("hide")){
+                                //als het "geen resultaten" scherm bestaat. Verstop het.
+                                $("table[id=geen_resultaten]").addClass("hide");
+                            }
+                        },
+                        error: function () {
+                            //drop menu content is leeg
+                            //alert('error');
+                            //laat zien op de pagina dat er geen resultaten zijn
+                            if (!$("table[id=show_normering]").hasClass("hide")){
+                                //haalt overzicht normering weg
+                                $("table[id=show_normering]").addClass("hide");
+                            }
+                            $("table[id=geen_resultaten]").removeClass("hide");
+                            //hide de andere dropdown menus
+                            if (!$("select[name=selected_werkproces]").closest('.select-wrapper').hasClass("hide")){
+                                $("select[name=selected_werkproces]").closest('.select-wrapper').addClass("hide");
+                            }
+                            if (!$("select[name=selected_criteria]").closest('.select-wrapper').hasClass("hide")){
+                                $("select[name=selected_criteria]").closest('.select-wrapper').addClass("hide");
+                            }
                         }
                     });
                 });
@@ -143,6 +168,24 @@ include("connect.php");
                             $("select[name=selected_criteria]").material_select();
                             //$("select[name=selected_criteria]").show();
                             $("select[name=selected_criteria]").closest('.select-wrapper').removeClass("hide");
+                            if (!$("table[id=geen_resultaten]").hasClass("hide")){
+                                //als het "geen resultaten" scherm bestaat. Verstop het.
+                                $("table[id=geen_resultaten]").addClass("hide");
+                            }
+                        },
+                        error: function () {
+                            //drop menu content is leeg
+                            //alert('error');
+                            //laat zien op de pagina dat er geen resultaten zijn
+                            if (!$("table[id=show_normering]").hasClass("hide")){
+                                //haalt overzicht normering weg
+                                $("table[id=show_normering]").addClass("hide");
+                            }
+                            $("table[id=geen_resultaten]").removeClass("hide");
+                            //hide de andere dropdown menus
+                            if (!$("select[name=selected_criteria]").closest('.select-wrapper').hasClass("hide")){
+                                $("select[name=selected_criteria]").closest('.select-wrapper').addClass("hide");
+                            }
                         }
                     });
                 });
@@ -210,8 +253,13 @@ include("connect.php");
                                 // link aanpassen
                                 $("#delhref").attr("href", "delete_normering.php?id=" + criterium_normering_id);
                             });
-
-
+                        },
+                        error: function () {
+                            if (!$("table[id=show_normering]").hasClass("hide")){
+                                //haalt overzicht normering weg
+                                $("table[id=show_normering]").addClass("hide");
+                            }
+                            $("table[id=geen_resultaten]").removeClass("hide");
                         }
                     });
                 });
