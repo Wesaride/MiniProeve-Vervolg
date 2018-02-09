@@ -215,6 +215,9 @@ include("connect.php");
                                     );
                                 //$("select[name=criteria]").material_select();
                                 //$("select[name=selected_criteria]").show();
+                                if(!$("table[id=geen_resultaten]").hasClass("hide")){
+                                    $("table[id=geen_resultaten]").addClass("hide")
+                                }
                                 $("table[id=show_normering]").removeClass("hide");
                             });
                             $(".modal-trigger2").leanModal();
