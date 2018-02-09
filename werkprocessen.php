@@ -54,6 +54,13 @@ include("connect.php");
 
                     </tbody>
                 </table>
+                <table id="geen_resultaten" class="hide">
+                    <thead>
+                        <tr>
+                            <th>Geen resultaten</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
         <!--EINDE CODE VOOR KLAS TOEVOEGEN BACKEND -->
@@ -84,20 +91,19 @@ include("connect.php");
                             //console.log(data);
                             $.each(data, function (index, element) {
                                 $("#show_werkproces").find('tbody')
-                                        .append($('<tr>', {id: element.id}
-                                        ).append($('<td>', {
-                                            text: element.name},
-                                                )).append($(
-                                                '<td><button data-target="ModalEditWerkproces" class="EditWerkproces btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'
-                                                )).append($(
-                                                '<td><button data-target="ModalDeleteWerkproces" class="DeleteWerkproces btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'
-                                                ))
-
-                                                );
+                                    .append($('<tr>', {id: element.id})
+                                        .append($('<td>', {text: element.name},))
+                                        .append($('<td><button data-target="ModalEditWerkproces" class="EditWerkproces btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'))
+                                        .append($('<td><button data-target="ModalDeleteWerkproces" class="DeleteWerkproces btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'))
+                                    );
                                 //$('#show_klas').append($('<td>', {value: element.klas_id, text: element.name}, '</td>'));
                                 $("#show_werkproces").removeClass("hide");
+                                if (!$("table[id=geen_resultaten]").hasClass("hide")){
+                                    //als het "geen resultaten" scherm bestaat. Verstop het.
+                                    $("table[id=geen_resultaten]").addClass("hide");
+                                }
                             });
-                                $(".modal-trigger2").leanModal();
+                            $(".modal-trigger2").leanModal();
 
                             //Edit button Werkproces
                             $(".EditWerkproces").on('click', function () {
@@ -132,7 +138,14 @@ include("connect.php");
                                 // link aanpassen
                                 $("#delhref").attr("href", "delete_werkproces.php?id=" + werkproces_id);
                             });
-                          
+                        },
+                        error: function () {
+                            if (!$("table[id=show_werkproces]").hasClass("hide")){
+                                //haalt overzicht werkproces weg
+                                $("table[id=show_werkproces]").addClass("hide");
+                            }
+                            //laat "geen resultaten" tab zien
+                            $("table[id=geen_resultaten]").removeClass("hide");
                         }
                     });
                 });
