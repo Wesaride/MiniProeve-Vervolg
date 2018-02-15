@@ -2,7 +2,7 @@
     <div class="grey darken-4 nav-wrapper">
         <a href="index.php" class="brand-logo" style="padding-left: 11.25px;">Mini Proeve van Bekwaamheid</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a class="waves-effect waves-light btn grey z-depth-5" href="logout.php"></i>Uitloggen</a></li>
+            <li><a class="waves-effect waves-light btn grey" href="logout.php"></i>Uitloggen</a></li>
         </ul>
     </div>
 </nav>
