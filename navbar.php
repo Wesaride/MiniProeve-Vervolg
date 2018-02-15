@@ -8,7 +8,7 @@
 </nav>
 
 <nav>
-    <div class="z-depth-5 white nav-wrapper">
+  <div class="white nav-wrapper">
         <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons black">menu</i></a>
         <ul class="hide-on-med-and-down">
             <li><a class="tekstkleur" href="index.php">Home</a></li>
