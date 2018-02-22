@@ -1,6 +1,12 @@
 <?php
 include("check.php");
 include("connect.php");
+if (isset($_POST['post_kerntaak'])){
+    $_SESSION['session_kerntaak'] = $_POST['post_kerntaak'];
+}
+if (isset($_SESSION['session_kerntaak'])){
+    $session_kerntaak = $_SESSION['session_kerntaak'];
+}
 ?>
 <html>
     <head>
@@ -21,18 +27,32 @@ include("connect.php");
             <div class="col s12 m4 l3" style="background-color: gray; height: 100%;">
                 <br>
                 <?php
-                $error = '';
+                $session_kerntaak = "";
+                if (isset($_SESSION['session_kerntaak'])){
+                    $session_kerntaak = $_SESSION['session_kerntaak'];
+                }
                 $get_kerntaak = "SELECT * FROM kerntaak";
                 $result_kerntaak = $conn->query($get_kerntaak);
                 if ($result_kerntaak->num_rows > 0) {
                     ?>
                     <select name="selected_kerntaak" required>
-                        <option selected="selected" disabled>Kies een kerntaken</option>
                         <?php
+                        if (isset($_SESSION['session_kerntaak'])){
+                            echo '<option disabled>Kies een kerntaak</option>';
+                        }
+                        else{
+                            echo "<option selected='selected' disabled>Kies een kerntaak</option>";
+                        }
                         while ($row_kerntaak = $result_kerntaak->fetch_assoc()) {
-                            ?>
-                            <option value="<?php echo $row_kerntaak["kerntaak_id"] ?>"><?php echo $row_kerntaak["kerntaak_naam"] ?></option>
-                            <?php
+                            if (isset($_SESSION['session_kerntaak'])){
+                                if ($_SESSION['session_kerntaak'] == $row_kerntaak['kerntaak_id']){
+                                    $selectedvalue = "selected='selected'";
+                                }
+                                else{
+                                    $selectedvalue = "";
+                                }
+                            }
+                            echo "<option " . $selectedvalue . " value=" . $row_kerntaak['kerntaak_id'] . ">" . $row_kerntaak['kerntaak_naam'] . "</option>";
                         }
                         ?>
                     </select>
@@ -77,6 +97,7 @@ include("connect.php");
                 // Show werkproces
                 $("select[name=selected_kerntaak]").on('change', function () {
                     kerntaak_id = this.value;
+                    $.post('normering.php', {post_kerntaak: kerntaak_id});
                     //alert(kerntaak_id);
 
                     $("tbody[name=tbody]").empty();
@@ -149,6 +170,15 @@ include("connect.php");
                         }
                     });
                 });
+                <?php
+                if (isset($_SESSION['session_kerntaak'])){
+                ?>
+                    if (typeof(<?php echo $_SESSION['session_kerntaak']?>) !== "undefined"){
+                        $("select[name=selected_kerntaak]").trigger('change');
+                    }
+                <?php
+                }
+                ?>
             });
         </script>
     </body>
