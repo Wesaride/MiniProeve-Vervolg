@@ -1,6 +1,19 @@
 <?php
 include("check.php");
 include("connect.php");
+
+if (isset($_POST['post_kerntaak'])){
+    $_SESSION['session_kerntaak'] = $_POST['post_kerntaak'];
+}
+if (isset($_POST['post_werkproces'])){
+    $_SESSION['session_werkproces'] = $_POST['post_werkproces'];
+}
+if (isset($_SESSION['session_kerntaak'])){
+    $session_kerntaak = $_SESSION['session_kerntaak'];
+}
+if (isset($_SESSION['session_werkproces'])){
+   $session_werkproces = $_SESSION['session_werkproces'];
+}
 ?>
 <html>
     <head>
@@ -21,17 +34,32 @@ include("connect.php");
             <div class="col s12 m4 l3 sidebar">
                 <br />
                 <?php
+                $session_kerntaak = "";
+                if (isset($_SESSION['session_kerntaak'])){
+                    $session_kerntaak = $_SESSION['session_kerntaak'];
+                }
                 $get_kerntaak = "SELECT * FROM kerntaak";
                 $result_kerntaak = $conn->query($get_kerntaak);
                 if ($result_kerntaak->num_rows > 0) {
                     ?>
                     <select name="selected_kerntaak" required>
-                        <option selected="selected" disabled>Kies een kerntaak</option>
                         <?php
+                        if (isset($_SESSION['session_kerntaak'])){
+                            echo '<option disabled>Kies een kerntaak</option>';
+                        }
+                        else{
+                            echo "<option selected='selected' disabled>Kies een kerntaak</option>";
+                        }
                         while ($row_kerntaak = $result_kerntaak->fetch_assoc()) {
-                            ?>
-                            <option value="<?php echo $row_kerntaak["kerntaak_id"] ?>"><?php echo $row_kerntaak["kerntaak_naam"] ?></option>
-                            <?php
+                            if (isset($_SESSION['session_kerntaak'])){
+                                if ($_SESSION['session_kerntaak'] == $row_kerntaak['kerntaak_id']){
+                                    $selectedvalue = "selected='selected'";
+                                }
+                                else{
+                                    $selectedvalue = "";
+                                }
+                            }
+                            echo "<option " . $selectedvalue . " value=" . $row_kerntaak['kerntaak_id'] . ">" . $row_kerntaak['kerntaak_naam'] . "</option>";
                         }
                         ?>
                     </select>
@@ -90,6 +118,7 @@ include("connect.php");
                 $("select[name=selected_kerntaak]").on('change', function () {
                     // waarde van geslecteerde id ophalen
                     kerntaak_id = this.value;
+                    $.post('normering.php', {post_kerntaak: kerntaak_id});
                     //alert(kerntaak_id);
 
                     // Alles leeg maken:
@@ -108,10 +137,25 @@ include("connect.php");
                             //alert(data);
                             $.each(data, function (index, element) {
                                 //console.log(element.name);
-                                $("select[name=selected_werkproces]").append($('<option>', {
-                                    value: element.id,
-                                    text: element.name
-                                }));
+                                <?php
+                                if (isset($_SESSION['session_werkproces'])){
+                                ?>
+                                    if ('<?php echo $session_werkproces?>' === element.id){
+                                        $("select[name=selected_werkproces]").append($('<option>', {
+                                            value: element.id,
+                                            text: element.name,
+                                            selected: 1
+                                        }));
+                                    }
+                                    else{
+                                        $("select[name=selected_werkproces]").append($('<option>', {
+                                            value: element.id,
+                                            text: element.name
+                                        }));
+                                    }
+                                <?php
+                                }
+                                ?>
                             });
                             // toepassen css
                             // ** material only! **
@@ -122,6 +166,16 @@ include("connect.php");
                                 //als het "geen resultaten" scherm bestaat. Verstop het.
                                 $("table[id=geen_resultaten]").addClass("hide");
                             }
+                            <?php
+                            if (isset($_SESSION['session_werkproces'])){
+                            ?>
+                                if (typeof(<?php echo $_SESSION['session_werkproces']?>) !== "undefined"){
+                                    $("select[name=selected_werkproces]").trigger('change');
+                                    //alert('jahoor');
+                                }
+                            <?php
+                            }
+                            ?>
                         },
                         error: function () {
                             //drop menu content is leeg
@@ -142,10 +196,19 @@ include("connect.php");
                         }
                     });
                 });
-
+                <?php
+                if (isset($_SESSION['session_kerntaak'])){
+                ?>
+                    if (typeof(<?php echo $_SESSION['session_kerntaak']?>) !== "undefined"){
+                        $("select[name=selected_kerntaak]").trigger('change');
+                    }
+                <?php
+                }
+                ?>
 
                 $("select[name=selected_werkproces]").on("change", function () {
                     werkproces_id = this.value;
+                    $.post('normering.php', {post_werkproces: werkproces_id});
                     //alert(werkproces_id);
 
                     // Table overzicht leegmaken voordat er nieuwe data ingeladen wordt.
