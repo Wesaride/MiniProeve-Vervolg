@@ -13,14 +13,14 @@ include("connect.php");
     <body>
         <?php
         include("navbar.php");
-        include("ModalAddKerntaak.php");
-        include("ModalEditKerntaak.php");
-        include("ModalDeleteKerntaak.php");
+        include("ModalAddProeve.php");
+        include("ModalEditProeve.php");
+        include("ModalDeleteProeve.php");
         ?>
         <div class="row" style="margin-bottom: auto;">
             <div class="col s12 m4 l3" style="background-color: gray; height: 100%;"></div>
             <div class="col s12 m8 l9" margin="0 auto">
-                <h4>Overzicht Proeve<a data-target="ModalAddKerntaak" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
+                <h4>Overzicht Proeve<a data-target="ModalAddProeve" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
                     <table>
                         <thead>
                             <tr>
@@ -30,16 +30,16 @@ include("connect.php");
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-                            $get_kerntaak_inhoud = "SELECT * FROM kerntaak";
-                            $result_get_kerntaak_inhoud = $conn->query($get_kerntaak_inhoud);
-                            if ($result_get_kerntaak_inhoud->num_rows > 0) {
-                                while ($row_get_kerntaak_inhoud = $result_get_kerntaak_inhoud->fetch_assoc()) {
+                          <?php
+                            $get_proeve_inhoud = "SELECT * FROM proeve";
+                            $result_get_proeve_inhoud = $conn->query($get_proeve_inhoud);
+                            if ($result_get_proeve_inhoud->num_rows > 0) {
+                                while ($row_get_proeve_inhoud = $result_get_proeve_inhoud->fetch_assoc()) {
                                     ?>
                                     <tr>
-                                        <td><?php echo $row_get_kerntaak_inhoud['kerntaak_naam']; ?></td>
-                                        <td><button data-id="<?php echo $row_get_kerntaak_inhoud['kerntaak_id']; ?>" data-target="ModalEditKerntaak" name="EditKerntaak" class="btn-floating btn-large waves-effect waves-light yellow btn modal-trigger"><i class="material-icons" >edit</i></button></td>
-                                        <td><button data-id="<?php echo $row_get_kerntaak_inhoud['kerntaak_id']; ?>" data-target="ModalDeleteKerntaak" name="DeleteKerntaak"  class="btn-floating btn-large waves-effect waves-light red btn modal-trigger"><i class="material-icons">delete</i></button></td>
+                                        <td><?php echo $row_get_proeve_inhoud['proeve_naam']; ?></td>
+                                        <td><button data-id="<?php echo $row_get_proeve_inhoud['proeve_id']; ?>" data-target="ModalEditProeve" name="EditProeve" class="btn-floating btn-large waves-effect waves-light yellow btn modal-trigger"><i class="material-icons" >edit</i></button></td>
+                                        <td><button data-id="<?php echo $row_get_proeve_inhoud['proeve_id']; ?>" data-target="ModalDeleteProeve" name="DeleteProeve"  class="btn-floating btn-large waves-effect waves-light red btn modal-trigger"><i class="material-icons">delete</i></button></td>
                                     <tr>
                                         <?php
                                     }
@@ -61,36 +61,36 @@ include("connect.php");
                 $(".button-collapse").sideNav();
 
                 // Edit button
-                $("button[name=EditKerntaak]").on('click', function () {
+                $("button[name=EditProeve]").on('click', function () {
                     // waarde van het geselecteerde id ophalen
-                    id_kerntaak = $(this).data("id");
+                    id_proeve = $(this).data("id");
 
                     // Velden leeg maken
-                    document.getElementById("kerntaak_id").value = "";
-                    document.getElementById("kerntaak_naam").value = "";
+                    document.getElementById("proeve_id").value = "";
+                    document.getElementById("proeve_naam").value = "";
 
                     // ophalen van informatie, met ajax om naam/omschrijving kerntaak op te halen
                     $.ajax({
                         type: 'GET',
-                        url: 'json_edit_kerntaak.php',
-                        data: {id: id_kerntaak},
+                        url: 'json_edit_proeve.php',
+                        data: {id: id_proeve},
                         dataType: 'json',
                         success: function (data) {
-                            $("#kerntaak_id").val(data.id);
-                            $("#kerntaak_naam").val(data.name);
-                            $("#kerntaak_naam").removeClass("hide");
+                            $("#proeve_id").val(data.id);
+                            $("#proeve_naam").val(data.name);
+                            $("#proeve_naam").removeClass("hide");
                         }
                     });
                 });
 
                 // DELETE BUTTON
-                $("button[name=DeleteKerntaak]").click(function (event) {
+                $("button[name=DeleteProeve]").click(function (event) {
                     event.preventDefault();
                     // ophalen van het id
-                    var kerntaak_id = $(this).data("id");
+                    var proeve_id = $(this).data("id");
                     //alert(student_id);
                     // link aanpassen
-                    $("#delhref").attr("href", "delete_kerntaak.php?id=" + kerntaak_id);
+                    $("#delhref").attr("href", "delete_proeve.php?id=" + proeve_id);
                 });
 
             });
