@@ -13,6 +13,7 @@
         <ul class="hide-on-med-and-down">
             <li><a class="tekstkleur" href="index.php">Home</a></li>
             <li><a class="tekstkleur" href="beoordeling.php">Beoordelen</a></li>
+            <li><a class="tekstkleur" href="proeve.php">Proeve</a></li>
             <li><a class="tekstkleur" href="kerntaken.php">Kerntaken</a></li>
             <li><a class="tekstkleur" href="werkprocessen.php">Werkprocessen</a></li>
             <li><a class="tekstkleur" href="criterium.php">Criteria</a></li>
@@ -23,6 +24,7 @@
         <ul class="side-nav" id="mobile-demo">
             <li><a class="tekstkleur" href="index.php">Home</a></li>
             <li><a class="tekstkleur" href="beoordeling.php">Beoordelen</a></li>
+            <li><a class="tekstkleur" href="proeve.php">Proeve</a></li>
             <li><a class="tekstkleur" href="kerntaken.php">Kerntaken</a></li>
             <li><a class="tekstkleur" href="werkprocessen.php">Werkprocessen</a></li>
             <li><a class="tekstkleur" href="criterium.php">Criterium</a></li>
