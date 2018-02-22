@@ -16,7 +16,7 @@
 if (isset($_POST["edit_proeve_submit"])) {
     if (isset($_POST["proeve_naam"])) {
         $edit_proeve_id = $_POST["proeve_id"];
-        $edit_proeve_submit = $_POST["proeve_naam"];
+        $edit_proeve_naam = $_POST["proeve_naam"];
         $edit_proeve = "UPDATE proeve SET proeve_naam='$edit_proeve_naam' WHERE proeve_id = $edit_proeve_id";
         if ($conn->query($edit_proeve) === TRUE) {
             //echo "Record updated successfully";
