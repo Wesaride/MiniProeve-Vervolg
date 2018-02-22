@@ -60,3 +60,13 @@ label {
 .sel {
     background-color: #0f9d58 !important;
 }
+
+.resultaten-select {
+    
+}
+.resultaten-select:hover {
+    background-color: purple;
+}
+.resultaten-select:active {
+    background-color: green;
+}

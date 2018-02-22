@@ -34,8 +34,8 @@ include("connect.php");
                     echo "</select>";
                 } ?>
                 
-                <select name="selected_student" size="7" multiple class="browser-default" 
-                        style="height:auto; margin:0; padding:0; border: none;">
+                <select name="selected_student" size="7" multiple class="browser-default resultaten-select" 
+                        style="height:auto; margin:0; padding:0; border: none; border-radius: 0; background-color:gray;">
                     <option value="1" style="height:35px; margin:0; padding:0; border:none;">
                         dit is een optie</option>
                     <option value="2">dit is een andere optie</option>
