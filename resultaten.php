@@ -1,6 +1,21 @@
 <?php
 include("check.php");
 include("connect.php");
+
+if (isset($_POST['post_klas'])){
+    $_SESSION['session_klas'] = $_POST['post_klas'];
+}
+if (isset($_POST['post_student'])){
+    $_SESSION['session_student'] = $_POST['post_student'];
+}
+//bereid session locals voor
+$session_klas = $session_student = "";
+if (isset($_SESSION['session_klas'])){
+    $session_klas = $_SESSION['session_klas'];
+}
+if (isset($_SESSION['session_student'])){
+    $session_student = $_SESSION['session_student'];
+}
 ?>
 <html>
     <head>
@@ -18,28 +33,40 @@ include("connect.php");
             <div class="col s12 m4 l3 sidebar">
                 <br />
                 <?php //haal klassen records op
-                $sql_klassen = "SELECT * FROM klas";
-                $result_klassen = $conn->query($sql_klassen);
-                if ($result_klassen->num_rows > 0) {
-                    //start select element en eerste selected option
-                    echo "<select name='selected_klas' required style='padding:0; margin:0;'>";
-                    echo     "<option selected='selected' disabled>Kies een klas</option>";
-                    //genereer voor alle records in de results een option
-                    while ($row_klassen = $result_klassen->fetch_assoc()) {
-                        $klas_id = $row_klassen["klas_id"];
-                        $klas_naam = $row_klassen["klas_naam"];
-                        echo "<option value='$klas_id'>Klas: $klas_naam</option>";
-                    }
-                    //einde select element
-                    echo "</select>";
-                } ?>
+                //$session_klas = "";
+                /*if (isset($_SESSION['session_klas'])){
+                    $session_klas = $_SESSION['session_klas'];
+                }*/
+                $sql_klas = "SELECT * FROM klas";
+                $result_klas = $conn->query($sql_klas);
+                if ($result_klas->num_rows > 0) {
+                    ?>
+                    <select name="selected_klas" required>
+                        <?php
+                        if (isset($_SESSION['session_klas'])){
+                            echo '<option disabled>Kies een klas</option>';
+                        }
+                        else{
+                            echo "<option selected='selected' disabled>Kies een klas</option>";
+                        }
+                        while ($row_klas = $result_klas->fetch_assoc()) {
+                            if (isset($_SESSION['session_klas'])){
+                                if ($_SESSION['session_klas'] == $row_klas['klas_id']){
+                                    $selectedvalue = "selected='selected'";
+                                }
+                                else{
+                                    $selectedvalue = "";
+                                }
+                            }
+                            echo "<option " . $selectedvalue . " value=" . $row_klas['klas_id'] . ">" . $row_klas['klas_naam'] . "</option>";
+                        }
+                        ?>
+                    </select>
+                    <?php
+                }
+                ?>
                 
-                <select name="selected_student" size="7" multiple class="browser-default resultaten-select" 
-                        style="height:auto; margin:0; padding:0; border: none; border-radius: 0; background-color:gray;">
-                    <option value="1" style="height:35px; margin:0; padding:0; border:none;">
-                        dit is een optie</option>
-                    <option value="2">dit is een andere optie</option>
-                    <option value="3">dit is nog een optie</option>
+                <select name="selected_student" class="">
                 </select>
                 
                 <br />
@@ -78,7 +105,7 @@ include("connect.php");
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function () {
-                           // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+                // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
                 $('.modal-trigger').leanModal();
                 $('select').material_select();
                 $(".button-collapse").sideNav();
@@ -86,21 +113,82 @@ include("connect.php");
                 //onchange selected_klas
                 //haal studenten op en geef weer in sidebar
                 $("select[name=selected_klas]").on('change', function () {
+                    //selecteerde id posten naar deze pagina, om straks in de session te gooien
                     klas_id = this.value;
-                    alert(klas_id);
+                    $.post('resultaten.php', {post_klas: klas_id});
+                    // Student dropdown leeg maken:
+                    $("select[name=selected_student]").empty().append($('<option>', {
+                        value: 0,
+                        text: "Kies een student"
+                    }));
+                    // ophalen van studenten met ajax
+                    $.ajax({
+                        type: 'GET',
+                        url: 'json_show_student.php',
+                        data: {id: klas_id},
+                        dataType: 'json',
+                        success: function (data) {
+                            //alert(data);
+                            $.each(data, function (index, element) {
+                                //creer de content voor de dropdown menu voor studenten
+                                if ('<?php echo $session_student?>' === element.student_id){
+                                    $("select[name=selected_student]").append($('<option>', {
+                                        value: element.student_id,
+                                        text: element.student_name,
+                                        selected: 1
+                                    }));
+                                }
+                                else{
+                                    $("select[name=selected_student]").append($('<option>', {
+                                        value: element.student_id,
+                                        text: element.student_name
+                                    }));
+                                }
+                            });
+                            // toepassen css
+                            // ** material only! **
+                            $("select[name=selected_student]").material_select();
+                            // als alles is opgehaald. Select weer laten zien.
+                            $("select[name=selected_student]").closest('.select-wrapper').removeClass("hide");
+                            
+                            <?php //trigger het laten zien van de volgende lijst alleen als deze gevuld is. Wouter heeft hierbij geholpen.
+                            if (isset($_SESSION['session_student'])){
+                            ?>
+                                if (typeof(<?php echo $_SESSION['session_student']?>) !== "undefined"){
+                                    $("select[name=selected_student]").trigger('change');
+                                    //alert('jahoor');
+                                }
+                            <?php
+                            }
+                            ?>
+                        },
+                        error: function () {
+                            //drop menu content is leeg
+                        }
+                    });
                 });
+                //trigger het laten zien van de gekozen klas als de session_klas bestaat
+                <?php
+                if (isset($_SESSION['session_klas'])){
+                ?>
+                    if (typeof(<?php echo $_SESSION['session_klas']?>) !== "undefined"){
+                        $("select[name=selected_klas]").trigger('change');
+                    }
+                <?php
+                }
+                ?>
                 
                 //onchange search
                 //haal studenten op en geef weer in sidebar
                 $("select[name=search]").on('change', function () {
                     search_term = this.value;
-                    alert(search_term);
+                    //alert(search_term);
                 });
                 
                 //Selecteer student
                 $("select[name=selected_student]").on('change', function () {
                     student_id = this.value;
-                    alert(student_id);
+                    //alert(student_id);
                 });
             });
         </script>

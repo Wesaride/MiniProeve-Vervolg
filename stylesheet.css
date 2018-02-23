@@ -62,11 +62,20 @@ label {
 }
 
 .resultaten-select {
-    
+    height:auto; 
+    border: none; 
+    border-radius: 0; 
 }
-.resultaten-select:hover {
-    background-color: purple;
+
+.resultaten-option {
+    height:35px; 
+    margin:0; 
+    padding:0; 
+    border:none;
 }
-.resultaten-select:active {
-    background-color: green;
+.resultaten-option:hover {
+    background-color: navy;
+}
+.resultaten-option:selected {
+    background-color: cyan;
 }

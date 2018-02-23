@@ -12,6 +12,7 @@ if (isset($_POST['post_criteria'])){
     $_SESSION['session_criteria'] = $_POST['post_criteria'];
 }
 //bereid session locals voor
+$session_kerntaak = $session_werkproces = $session_criteria = "";
 if (isset($_SESSION['session_kerntaak'])){
     $session_kerntaak = $_SESSION['session_kerntaak'];
 }
@@ -41,10 +42,6 @@ if (isset($_SESSION['session_criteria'])){
             <div class="col s12 m4 l3 sidebar">
                 <br />
                 <?php
-                $session_kerntaak = "";
-                if (isset($_SESSION['session_kerntaak'])){
-                    $session_kerntaak = $_SESSION['session_kerntaak'];
-                }
                 $get_kerntaak = "SELECT * FROM kerntaak";
                 $result_kerntaak = $conn->query($get_kerntaak);
                 if ($result_kerntaak->num_rows > 0) {
@@ -58,6 +55,7 @@ if (isset($_SESSION['session_criteria'])){
                             echo "<option selected='selected' disabled>Kies een kerntaak</option>";
                         }
                         while ($row_kerntaak = $result_kerntaak->fetch_assoc()) {
+                            $selectedvalue = "";
                             if (isset($_SESSION['session_kerntaak'])){
                                 if ($_SESSION['session_kerntaak'] == $row_kerntaak['kerntaak_id']){
                                     $selectedvalue = "selected='selected'";
@@ -127,23 +125,20 @@ if (isset($_SESSION['session_criteria'])){
                 $("select").material_select();
                 $(".button-collapse").sideNav();
                 //alert(  );
-                
-                
                             
                 //kerntaak is geselecteerd. Zoek werkprocessen.
                 $("select[name=selected_kerntaak]").on('change', function () {
-
                     // waarde van geslecteerde id ophalen
                     kerntaak_id = this.value;
                     $.post('normering.php', {post_kerntaak: kerntaak_id});
 
-                    // Alles leeg maken:
+                    // Werkproces leeg maken:
                     $("select[name=selected_werkproces]").empty().append($('<option>', {
                         value: 0,
                         text: "Kies een werkproces"
                     }));
 
-                    // ophalen van informatie van de tweede dropdown, met ajax
+                    // ophalen van werkprocessen, met ajax
                     $.ajax({
                         type: 'GET',
                         url: 'json_show_werkproces.php',
@@ -155,25 +150,19 @@ if (isset($_SESSION['session_criteria'])){
                                 //console.log(element.name);
                                 //alert(element.id);
                                 //creer de content voor de dropdown menu voor werkprocessen
-                                <?php
-                                if (isset($_SESSION['session_werkproces'])){
-                                ?>
-                                    if ('<?php echo $session_werkproces?>' === element.id){
-                                        $("select[name=selected_werkproces]").append($('<option>', {
-                                            value: element.id,
-                                            text: element.name,
-                                            selected: 1
-                                        }));
-                                    }
-                                    else{
-                                        $("select[name=selected_werkproces]").append($('<option>', {
-                                            value: element.id,
-                                            text: element.name
-                                        }));
-                                    }
-                                <?php
+                                if ('<?php echo $session_werkproces?>' === element.werkproces_id){
+                                    $("select[name=selected_werkproces]").append($('<option>', {
+                                        value: element.werkproces_id,
+                                        text: element.werkproces_name,
+                                        selected: 1
+                                    }));
                                 }
-                                ?>
+                                else{
+                                    $("select[name=selected_werkproces]").append($('<option>', {
+                                        value: element.werkproces_id,
+                                        text: element.werkproces_name
+                                    }));
+                                }
                             });
                             // toepassen css
                             // ** material only! **
@@ -252,25 +241,19 @@ if (isset($_SESSION['session_criteria'])){
                             //alert(data);
                             //creer de content voor de dropdown menu voor werkprocessen
                             $.each(data, function (index, element) {
-                                <?php
-                                if (isset($_SESSION['session_criteria'])){
-                                ?>
-                                    if ('<?php echo $session_criteria?>' === element.criterium_id){
-                                        $("select[name=selected_criteria]").append($('<option>', {
-                                            value: element.criterium_id,
-                                            text: element.criterium_naam,
-                                            selected: 1
-                                        }));
-                                    }
-                                    else{
-                                        $("select[name=selected_criteria]").append($('<option>', {
-                                            value: element.criterium_id,
-                                            text: element.criterium_naam
-                                        }));
-                                    }
-                                <?php
+                                if ('<?php echo $session_criteria?>' === element.criterium_id){
+                                    $("select[name=selected_criteria]").append($('<option>', {
+                                        value: element.criterium_id,
+                                        text: element.criterium_naam,
+                                        selected: 1
+                                    }));
                                 }
-                                ?>
+                                else{
+                                    $("select[name=selected_criteria]").append($('<option>', {
+                                        value: element.criterium_id,
+                                        text: element.criterium_naam
+                                    }));
+                                }
                                 //console.log(element.criterium_id, element.criterium_naam);
                             });
                             $("select[name=selected_criteria]").material_select();
@@ -420,8 +403,8 @@ if (isset($_SESSION['session_criteria'])){
                             $.each(data, function (index, element) {
                                 //console.log(element.criterium_id, element.criterium_naam);
                                 $("#show_normering").find('tbody')
-                                    .append($('<tr>', {id: element.criterium_normering_id})
-                                        .append($('<td>', {text: element.criterium_normering_name},))
+                                    .append($('<tr>', {id: element.normering_id})
+                                        .append($('<td>', {text: element.normering_name},))
                                         .append($('<td><button data-target="ModalEditNormering" name="EditNormering" class="EditNormering btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'))
                                         .append($('<td><button data-target="ModalDeleteNormering" name="DeleteNormering" class="DeleteNormering btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'))
                                     );
