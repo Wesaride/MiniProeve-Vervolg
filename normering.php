@@ -124,7 +124,6 @@ if (isset($_SESSION['session_criteria'])){
                 $(".modal-trigger").leanModal();
                 $("select").material_select();
                 $(".button-collapse").sideNav();
-                //alert(  );
                             
                 //kerntaak is geselecteerd. Zoek werkprocessen.
                 $("select[name=selected_kerntaak]").on('change', function () {
