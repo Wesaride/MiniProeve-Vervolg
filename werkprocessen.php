@@ -110,7 +110,7 @@ if (isset($_SESSION['session_kerntaak'])){
                 $('select').material_select();
                 $(".button-collapse").sideNav();
                 
-                //select dropdown cohorten
+                //select dropdown cohorten, show proeven
                 $("select[name=selected_cohort]").on('change', function () {
                     cohort_id = this.value;
                     $.post('werkprocessen.php',{post_cohort: cohort_id});
@@ -232,14 +232,11 @@ if (isset($_SESSION['session_kerntaak'])){
                     });
                 });
                 
-                //Select  
-                $("select[name=selected_werkproces]").on('change', function () {
+                //Select dropdown kerntaken, show content records
+                $("select[name=selected_kerntaak]").on('change', function () {
                     kerntaak_id = this.value;
-                    $.post('normering.php', {post_kerntaak: kerntaak_id});
-                    //alert(kerntaak_id);
-
+                    $.post('werkprocessen.php', {post_kerntaak: kerntaak_id});
                     $("tbody[name=tbody]").empty();
-
                     // ophalen van informatie, met ajax
                     $.ajax({
                         type: 'GET',
@@ -308,15 +305,11 @@ if (isset($_SESSION['session_kerntaak'])){
                         }
                     });
                 });
-                <?php
-                if (isset($_SESSION['session_kerntaak'])){
-                ?>
+          <?php if (isset($_SESSION['session_kerntaak'])){ ?>
                     if (typeof(<?php echo $_SESSION['session_kerntaak']?>) !== "undefined"){
                         $("select[name=selected_kerntaak]").trigger('change');
                     }
-                <?php
-                }
-                ?>
+          <?php } ?>
             });
         </script>
     </body>
