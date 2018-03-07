@@ -8,6 +8,7 @@ if (isset($_POST['post_kerntaak'])){
 if (isset($_POST['post_werkproces'])){
     $_SESSION['session_werkproces'] = $_POST['post_werkproces'];
 }
+$session_kerntaak = $session_werkproces = "";
 if (isset($_SESSION['session_kerntaak'])){
     $session_kerntaak = $_SESSION['session_kerntaak'];
 }
@@ -34,10 +35,6 @@ if (isset($_SESSION['session_werkproces'])){
             <div class="col s12 m4 l3 sidebar">
                 <br />
                 <?php
-                $session_kerntaak = "";
-                if (isset($_SESSION['session_kerntaak'])){
-                    $session_kerntaak = $_SESSION['session_kerntaak'];
-                }
                 $get_kerntaak = "SELECT * FROM kerntaak";
                 $result_kerntaak = $conn->query($get_kerntaak);
                 if ($result_kerntaak->num_rows > 0) {
@@ -51,12 +48,10 @@ if (isset($_SESSION['session_werkproces'])){
                             echo "<option selected='selected' disabled>Kies een kerntaak</option>";
                         }
                         while ($row_kerntaak = $result_kerntaak->fetch_assoc()) {
+                            $selectedvalue = "";
                             if (isset($_SESSION['session_kerntaak'])){
                                 if ($_SESSION['session_kerntaak'] == $row_kerntaak['kerntaak_id']){
                                     $selectedvalue = "selected='selected'";
-                                }
-                                else{
-                                    $selectedvalue = "";
                                 }
                             }
                             echo "<option " . $selectedvalue . " value=" . $row_kerntaak['kerntaak_id'] . ">" . $row_kerntaak['kerntaak_naam'] . "</option>";
@@ -114,11 +109,11 @@ if (isset($_SESSION['session_werkproces'])){
                 $("select").material_select();
                 $(".button-collapse").sideNav();
 
-                //Show criterium
+                //Haal werkprocessen voor kerntaak op
                 $("select[name=selected_kerntaak]").on('change', function () {
                     // waarde van geslecteerde id ophalen
                     kerntaak_id = this.value;
-                    $.post('normering.php', {post_kerntaak: kerntaak_id});
+                    $.post('criterium.php', {post_kerntaak: kerntaak_id});
                     //alert(kerntaak_id);
 
                     // Alles leeg maken:
@@ -137,25 +132,23 @@ if (isset($_SESSION['session_werkproces'])){
                             //alert(data);
                             $.each(data, function (index, element) {
                                 //console.log(element.name);
-                                <?php
-                                if (isset($_SESSION['session_werkproces'])){
-                                ?>
-                                    if ('<?php echo $session_werkproces?>' === element.id){
-                                        $("select[name=selected_werkproces]").append($('<option>', {
-                                            value: element.id,
-                                            text: element.name,
-                                            selected: 1
-                                        }));
-                                    }
-                                    else{
-                                        $("select[name=selected_werkproces]").append($('<option>', {
-                                            value: element.id,
-                                            text: element.name
-                                        }));
-                                    }
-                                <?php
+                                //sestype = typeof('<?php //echo $session_werkproces?>');
+                                //dbtype = typeof(element.werkproces_id);
+                                //alert("types " + sestype + dbtype);
+                                //alert(<?php //echo $session_werkproces?> + element.werkproces_id);
+                                if ('<?php echo $session_werkproces?>' === element.werkproces_id){
+                                    $("select[name=selected_werkproces]").append($('<option>', {
+                                        value: element.werkproces_id,
+                                        text: element.werkproces_name,
+                                        selected: 1
+                                    }));
                                 }
-                                ?>
+                                else{
+                                    $("select[name=selected_werkproces]").append($('<option>', {
+                                        value: element.werkproces_id,
+                                        text: element.werkproces_name
+                                    }));
+                                }
                             });
                             // toepassen css
                             // ** material only! **
@@ -208,7 +201,7 @@ if (isset($_SESSION['session_werkproces'])){
 
                 $("select[name=selected_werkproces]").on("change", function () {
                     werkproces_id = this.value;
-                    $.post('normering.php', {post_werkproces: werkproces_id});
+                    $.post('criterium.php', {post_werkproces: werkproces_id});
                     //alert(werkproces_id);
 
                     // Table overzicht leegmaken voordat er nieuwe data ingeladen wordt.

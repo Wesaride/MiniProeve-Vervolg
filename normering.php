@@ -60,9 +60,6 @@ if (isset($_SESSION['session_criteria'])){
                                 if ($_SESSION['session_kerntaak'] == $row_kerntaak['kerntaak_id']){
                                     $selectedvalue = "selected='selected'";
                                 }
-                                else{
-                                    $selectedvalue = "";
-                                }
                             }
                             echo "<option " . $selectedvalue . " value=" . $row_kerntaak['kerntaak_id'] . ">" . $row_kerntaak['kerntaak_naam'] . "</option>";
                         }
@@ -81,6 +78,14 @@ if (isset($_SESSION['session_criteria'])){
             <div class="col s12 m8 l9">
                 <h4>Overzicht normeringen <a data-target="ModalAddNormering" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
                 <?php
+//                if (isset($_SESSION['session_cohort'])){
+//                    echo $_SESSION['session_cohort'];
+//                    
+//                }
+//                if (isset($_SESSION['session_proeve'])){
+//                    echo $_SESSION['session_proeve'];
+//                    
+//                }
 //                if (isset($_SESSION['session_kerntaak'])){
 //                    echo $_SESSION['session_kerntaak'];
 //                    
@@ -131,7 +136,6 @@ if (isset($_SESSION['session_criteria'])){
                     // waarde van geslecteerde id ophalen
                     kerntaak_id = this.value;
                     $.post('normering.php', {post_kerntaak: kerntaak_id});
-
                     // Werkproces leeg maken:
                     $("select[name=selected_werkproces]").empty().append($('<option>', {
                         value: 0,
