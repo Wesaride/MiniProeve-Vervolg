@@ -26,8 +26,7 @@ if (isset($_SESSION['session_cohort'])){
         include("ModalDeleteProeve.php");
         ?>
         <div class="row" style="margin-bottom: auto;">
-<<<<<<< HEAD
-            <div class="col s12 m4 l3" style="overflow: scroll; height: 85% background-color: gray; height: 100%;">
+            <div class="col s12 m4 l3" style="background-color: gray; height: 100%;">
                 <br>
                 <?php
                 $get_cohort = "SELECT * FROM cohort";
@@ -61,7 +60,7 @@ if (isset($_SESSION['session_cohort'])){
                 }
                 ?>
             </div>
-            <div class="col s12 m8 l9">
+            <div class="col s12 m8 l9" style="overflow: scroll; height: 85%;">
                 <h4>Overzicht Proeve<a data-target="ModalAddProeve" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
                 <table id="show_proeve" class="hide">
                     <thead>
