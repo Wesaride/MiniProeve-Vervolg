@@ -1,6 +1,22 @@
 <?php
 include("check.php");
 include("connect.php");
+
+
+if (isset($_POST['post_cohort'])){
+    $_SESSION['session_cohort'] = $_POST['post_cohort'];
+}
+if (isset($_POST['post_proeve'])){
+    $_SESSION['session_proeve'] = $_POST['post_proeve'];
+}
+$session_cohort = $session_proeve = "";
+if (isset($_SESSION['session_cohort'])){
+    $session_cohort = $_SESSION['session_cohort'];
+}
+if (isset($_SESSION['session_proeve'])){
+    $session_proeve = $_SESSION['session_proeve'];
+}
+
 ?>
 <html>
     <head>
@@ -21,32 +37,32 @@ include("connect.php");
             
             <div class="col s12 m4 l3" style="background-color: gray; height: 100%;">
                 <?php
-                $session_kerntaak = "";
-                if (isset($_SESSION['session_kerntaak'])){
-                    $session_kerntaak = $_SESSION['session_kerntaak'];
+                $session_cohort = "";
+                if (isset($_SESSION['session_cohort'])){
+                    $session_cohort = $_SESSION['session_cohort'];
                 }
-                $get_kerntaak = "SELECT * FROM kerntaak";
-                $result_kerntaak = $conn->query($get_kerntaak);
-                if ($result_kerntaak->num_rows > 0) {
+                $get_cohort = "SELECT * FROM cohort";
+                $result_cohort = $conn->query($get_cohort);
+                if ($result_cohort->num_rows > 0) {
                     ?>
-                    <select name="selected_kerntaak" required>
+                    <select name="selected_cohort" required>
                         <?php
-                        if (isset($_SESSION['session_kerntaak'])){
-                            echo '<option disabled>Kies een kerntaak</option>';
+                        if (isset($_SESSION['session_cohort'])){
+                            echo '<option disabled>Kies een cohort</option>';
                         }
                         else{
-                            echo "<option selected='selected' disabled>Kies een kerntaak</option>";
+                            echo "<option selected='selected' disabled>Kies een cohort</option>";
                         }
-                        while ($row_kerntaak = $result_kerntaak->fetch_assoc()) {
-                            if (isset($_SESSION['session_kerntaak'])){
-                                if ($_SESSION['session_kerntaak'] == $row_kerntaak['kerntaak_id']){
+                        while ($row_cohort = $result_cohort->fetch_assoc()) {
+                            if (isset($_SESSION['session_cohort'])){
+                                if ($_SESSION['session_cohort'] == $row_cohort['cohort_id']){
                                     $selectedvalue = "selected='selected'";
                                 }
                                 else{
                                     $selectedvalue = "";
                                 }
                             }
-                            echo "<option " . $selectedvalue . " value=" . $row_kerntaak['kerntaak_id'] . ">" . $row_kerntaak['kerntaak_naam'] . "</option>";
+                            echo "<option " . $selectedvalue . " value=" . $row_cohort['cohort_id'] . ">" . $row_cohort['cohort_jaar'] . "</option>";
                         }
                         ?>
                     </select>
