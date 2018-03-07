@@ -18,8 +18,43 @@ include("connect.php");
         include("ModalDeleteKerntaak.php");
         ?>
         <div class="row" style="margin-bottom: auto;">
-            <div class="col s12 m4 l3" style="background-color: gray; height: 100%;"></div>
-            <div class="col s12 m8 l9" margin="0 auto">
+            
+            <div class="col s12 m4 l3" style="background-color: gray; height: 100%;">
+                <?php
+                $session_kerntaak = "";
+                if (isset($_SESSION['session_kerntaak'])){
+                    $session_kerntaak = $_SESSION['session_kerntaak'];
+                }
+                $get_kerntaak = "SELECT * FROM kerntaak";
+                $result_kerntaak = $conn->query($get_kerntaak);
+                if ($result_kerntaak->num_rows > 0) {
+                    ?>
+                    <select name="selected_kerntaak" required>
+                        <?php
+                        if (isset($_SESSION['session_kerntaak'])){
+                            echo '<option disabled>Kies een kerntaak</option>';
+                        }
+                        else{
+                            echo "<option selected='selected' disabled>Kies een kerntaak</option>";
+                        }
+                        while ($row_kerntaak = $result_kerntaak->fetch_assoc()) {
+                            if (isset($_SESSION['session_kerntaak'])){
+                                if ($_SESSION['session_kerntaak'] == $row_kerntaak['kerntaak_id']){
+                                    $selectedvalue = "selected='selected'";
+                                }
+                                else{
+                                    $selectedvalue = "";
+                                }
+                            }
+                            echo "<option " . $selectedvalue . " value=" . $row_kerntaak['kerntaak_id'] . ">" . $row_kerntaak['kerntaak_naam'] . "</option>";
+                        }
+                        ?>
+                    </select>
+                    <?php
+                }
+                ?>
+            </div>
+            <div style="overflow: scroll; height: 85%" class="col s12 m8 l9" margin="0 auto">
                 <h4>Overzicht kerntaken <a data-target="ModalAddKerntaak" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
                     <table>
                         <thead>

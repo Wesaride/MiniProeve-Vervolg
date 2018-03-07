@@ -75,7 +75,7 @@ if (isset($_SESSION['session_criteria'])){
 
                 </select><br />
             </div>
-            <div class="col s12 m8 l9">
+            <div style="overflow: scroll; height: 85%" class="col s12 m8 l9">
                 <h4>Overzicht normeringen <a data-target="ModalAddNormering" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
                 <?php
 //                if (isset($_SESSION['session_cohort'])){

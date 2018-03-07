@@ -76,7 +76,8 @@ if (isset($_SESSION['session_kerntaak'])){
                 }
                 ?>
             </div>
-            <div class="col s12 m8 l9">
+            <div style="overflow: scroll; height: 85%" class="col s12 m8 l9">
+                
                 <h4>Overzicht werkprocessen <a data-target="ModalAddWerkproces" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
                 <table id="show_werkproces" class="hide">
                     <thead>

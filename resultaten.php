@@ -84,7 +84,7 @@ if (isset($_SESSION['session_student'])){
                 </select>
                 
             </div>
-            <div class="col s12 m8 l9" margin="0 auto">
+            <div style="overflow: scroll; height: 85%" class="col s12 m8 l9" margin="0 auto">
                 <h4>Resultaten en Beoordelen</h4>
                 <table>
                 <thead>

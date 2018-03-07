@@ -26,7 +26,8 @@ if (isset($_SESSION['session_cohort'])){
         include("ModalDeleteProeve.php");
         ?>
         <div class="row" style="margin-bottom: auto;">
-            <div class="col s12 m4 l3" style="background-color: gray; height: 100%;">
+<<<<<<< HEAD
+            <div class="col s12 m4 l3" style="overflow: scroll; height: 85% background-color: gray; height: 100%;">
                 <br>
                 <?php
                 $get_cohort = "SELECT * FROM cohort";
