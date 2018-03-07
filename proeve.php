@@ -19,7 +19,7 @@ include("connect.php");
         ?>
         <div class="row" style="margin-bottom: auto;">
             <div class="col s12 m4 l3" style="background-color: gray; height: 100%;"></div>
-            <div class="col s12 m8 l9" margin="0 auto">
+            <div style="overflow: scroll; height: 85%" class="col s12 m8 l9" margin="0 auto">
                 <h4>Overzicht Proeve<a data-target="ModalAddProeve" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
                     <table>
                         <thead>

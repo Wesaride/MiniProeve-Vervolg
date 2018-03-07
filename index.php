@@ -48,8 +48,8 @@ include("connect.php");
                     <li class="collection-item"><button data-target="ModalAddCriterium" class="btn modal-trigger" style="width:250px">Criterium Toevoegen</button></li>
                 </ul>
             </div>
-            <div class="col s12 m8 l9">
 
+            <div style="overflow: scroll; height: 85%" class="col s12 m8 l9" >
             </div>
         </div>
         <!--EINDE CODE VOOR KLAS TOEVOEGEN BACKEND -->
@@ -167,7 +167,8 @@ include("connect.php");
                         }
                     });
 
-                }); F
+                });
+                F
             });
         </script>
     </body>
