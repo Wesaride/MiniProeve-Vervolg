@@ -110,6 +110,8 @@ if (isset($_SESSION['session_proeve'])){
                 $('.modal-trigger').leanModal();
                 $('select').material_select();
                 $(".button-collapse").sideNav();
+                
+                
 
                 // Edit button
                 $("button[name=EditKerntaak]").on('click', function () {
