@@ -14,4 +14,3 @@ if ($result_normering->num_rows > 0) {
     }
 }
 echo json_encode($return_normering);
-?>

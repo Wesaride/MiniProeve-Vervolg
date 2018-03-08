@@ -1,8 +1,24 @@
 <?php
 include("check.php");
 include("connect.php");
+
+if (isset($_POST['post_cohort'])){
+    $_SESSION['session_cohort'] = $_POST['post_cohort'];
+}
+if (isset($_POST['post_proeve'])){
+    $_SESSION['session_proeve'] = $_POST['post_proeve'];
+}
 if (isset($_POST['post_kerntaak'])){
     $_SESSION['session_kerntaak'] = $_POST['post_kerntaak'];
+}
+
+$session_cohort = $session_proeve = $session_kerntaak = "";
+
+if (isset($_SESSION['session_cohort'])){
+    $session_cohort = $_SESSION['session_cohort'];
+}
+if (isset($_SESSION['session_proeve'])){
+    $session_proeve = $_SESSION['session_proeve'];
 }
 if (isset($_SESSION['session_kerntaak'])){
     $session_kerntaak = $_SESSION['session_kerntaak'];
@@ -27,38 +43,34 @@ if (isset($_SESSION['session_kerntaak'])){
             <div class="col s12 m4 l3" style="background-color: gray; height: 100%;">
                 <br>
                 <?php
-                $session_kerntaak = "";
-                if (isset($_SESSION['session_kerntaak'])){
-                    $session_kerntaak = $_SESSION['session_kerntaak'];
-                }
-                $get_kerntaak = "SELECT * FROM kerntaak";
-                $result_kerntaak = $conn->query($get_kerntaak);
-                if ($result_kerntaak->num_rows > 0) {
+                $get_cohort = "SELECT * FROM cohort";
+                $result_cohort = $conn->query($get_cohort);
+                if ($result_cohort->num_rows > 0) {
                     ?>
-                    <select name="selected_kerntaak" required>
+                    <select name="selected_cohort" required>
                         <?php
-                        if (isset($_SESSION['session_kerntaak'])){
-                            echo '<option disabled>Kies een kerntaak</option>';
+                        if (isset($_SESSION['session_cohort'])){
+                            echo '<option disabled>Kies een cohort</option>';
                         }
                         else{
-                            echo "<option selected='selected' disabled>Kies een kerntaak</option>";
+                            echo "<option selected='selected' disabled>Kies een cohort</option>";
                         }
-                        while ($row_kerntaak = $result_kerntaak->fetch_assoc()) {
-                            if (isset($_SESSION['session_kerntaak'])){
-                                if ($_SESSION['session_kerntaak'] == $row_kerntaak['kerntaak_id']){
+                        while ($row_cohort = $result_cohort->fetch_assoc()) {
+                            $selectedvalue = "";
+                            if (isset($_SESSION['session_cohort'])){
+                                if ($_SESSION['session_cohort'] == $row_cohort['cohort_id']){
                                     $selectedvalue = "selected='selected'";
                                 }
-                                else{
-                                    $selectedvalue = "";
-                                }
                             }
-                            echo "<option " . $selectedvalue . " value=" . $row_kerntaak['kerntaak_id'] . ">" . $row_kerntaak['kerntaak_naam'] . "</option>";
+                            echo "<option " . $selectedvalue . " value=" . $row_cohort['cohort_id'] . ">" . $row_cohort['cohort_jaar'] . "</option>";
                         }
                         ?>
                     </select>
                     <?php
                 }
                 ?>
+                <select name="selected_proeve" class="hide"></select>
+                <select name="selected_kerntaak" class="hide"></select>
             </div>
             <div style="overflow: scroll; height: 85%" class="col s12 m8 l9">
                 <h4>Overzicht werkprocessen <a data-target="ModalAddWerkproces" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
@@ -93,15 +105,150 @@ if (isset($_SESSION['session_kerntaak'])){
                 $('.modal-trigger').leanModal();
                 $('select').material_select();
                 $(".button-collapse").sideNav();
-
-                // Show werkproces
+                
+                //select dropdown cohorten, show proeven
+                $("select[name=selected_cohort]").on('change', function () {
+                    cohort_id = this.value;
+                    $.post('werkprocessen.php',{post_cohort: cohort_id});
+                    alert(cohort_id);
+                    $("select[name=selected_proeve]").empty().append($('<option>', {
+                        value: 0,
+                        text: "Kies een proeve"
+                    }));
+                    
+                    $.ajax({
+                        type: 'GET',
+                        url: 'json_show_proeve.php',
+                        data: {id: cohort_id},
+                        dataType: 'json',
+                        success: function (data){
+                            $.each(data, function (index, element) {
+                                //creer de content voor de dropdown menu voor werkprocessen
+                                if ('<?php echo $session_proeve?>' === element.proeve_id){
+                                    $("select[name=selected_proeve]").append($('<option>', {
+                                        value: element.proeve_id,
+                                        text: element.proeve_name,
+                                        selected: 1
+                                    }));
+                                }
+                                else{
+                                    $("select[name=selected_proeve]").append($('<option>', {
+                                        value: element.proeve_id,
+                                        text: element.proeve_name
+                                    }));
+                                }
+                            });
+                            
+                            // toepassen css
+                            $("select[name=selected_proeve]").material_select();
+                            $("select[name=selected_kerntaak]").material_select();
+                            
+                            // als alles is opgehaald, volgende dropdown laten zien (hide weghalen)
+                            $("select[name=selected_proeve]").closest('.select-wrapper').removeClass("hide");
+                            
+                            //als het "geen resultaten" scherm bestaat. Verstop het.
+                            if (!$("table[id=geen_resultaten]").hasClass("hide")){
+                                $("table[id=geen_resultaten]").addClass("hide");
+                            }
+                            
+                            //trigger het laten zien van de volgende lijst alleen als deze gevuld is. Wouter heeft hierbij geholpen.
+                      <?php if (isset($_SESSION['session_proeve'])){ ?>
+                                if (typeof(<?php echo $_SESSION['session_proeve']?>) !== "undefined"){
+                                    $("select[name=selected_proeve]").trigger('change');
+                                    //alert('jahoor');
+                                }
+                      <?php } ?>
+                        },
+                        error: function (){
+                            //laat zien op de pagina dat er geen resultaten zijn
+                            $("table[id=geen_resultaten]").removeClass("hide");
+                            
+                            //hide de andere dropdown menus
+                            if (!$("select[name=selected_proeve]").closest('.select-wrapper').hasClass("hide")){
+                                $("select[name=selected_proeve]").closest('.select-wrapper').addClass("hide");
+                            }
+                            if (!$("select[name=selected_kerntaak]").closest('.select-wrapper').hasClass("hide")){
+                                $("select[name=selected_kerntaak]").closest('.select-wrapper').addClass("hide");
+                            }
+                        }
+                    });
+                });
+            //
+          <?php if (isset($_SESSION['session_cohort'])){ ?>
+                    if (typeof(<?php echo $_SESSION['session_cohort']?>) !== "undefined"){
+                        $("select[name=selected_cohort]").trigger('change');
+                    }
+          <?php } ?>
+                
+                //select dropdown proeve, show kerntaken
+                $("select[name=selected_proeve]").on('change', function () {
+                    proeve_id = this.value;
+                    $.post('werkprocessen.php',{post_proeve: proeve_id});
+                    
+                    $("select[name=selected_kerntaak]").empty().append($('<option>', {
+                        value: 0,
+                        text: "Kies een kerntaak"
+                    }));
+                    
+                    $.ajax({
+                        type: 'GET',
+                        url: 'json_show_kerntaak.php',
+                        data: {id: proeve_id},
+                        dataType: 'json',
+                        success: function (data){
+                            $.each(data, function (index, element) {
+                                //creer de content voor de dropdown menu voor kerntaken
+                                if ('<?php echo $session_kerntaak?>' === element.kerntaak_id){
+                                    $("select[name=selected_kerntaak]").append($('<option>', {
+                                        value: element.kerntaak_id,
+                                        text: element.kerntaak_name,
+                                        selected: 1
+                                    }));
+                                }
+                                else{
+                                    $("select[name=selected_kerntaak]").append($('<option>', {
+                                        value: element.kerntaak_id,
+                                        text: element.kerntaak_name
+                                    }));
+                                }
+                            });
+                            
+                            // toepassen css
+                            $("select[name=selected_kerntaak]").material_select();
+                            
+                            // als alles is opgehaald, volgende dropdown laten zien (hide weghalen)
+                            $("select[name=selected_kerntaak]").closest('.select-wrapper').removeClass("hide");
+                            
+                            //als het "geen resultaten" scherm bestaat. Verstop het.
+                            if (!$("table[id=geen_resultaten]").hasClass("hide")){
+                                $("table[id=geen_resultaten]").addClass("hide");
+                            }
+                            
+                            //trigger het laten zien van de volgende lijst alleen als deze gevuld is. Wouter heeft hierbij geholpen.
+                      <?php if (isset($_SESSION['session_kerntaak'])){ ?>
+                                if (typeof(<?php echo $_SESSION['session_kerntaak']?>) !== "undefined"){
+                                    $("select[name=selected_kerntaak]").trigger('change');
+                                    //alert('jahoor');
+                                }
+                      <?php } ?>
+                        },
+                        error: function (){
+                            //laat zien op de pagina dat er geen resultaten zijn
+                            $("table[id=geen_resultaten]").removeClass("hide");
+                            
+                            //hide de andere dropdown menus
+                            if (!$("select[name=selected_kerntaak]").closest('.select-wrapper').hasClass("hide")){
+                                $("select[name=selected_kerntaak]").closest('.select-wrapper').addClass("hide");
+                            }
+                        }
+                    });
+                });
+                
+                //Select dropdown kerntaken, show content records
                 $("select[name=selected_kerntaak]").on('change', function () {
                     kerntaak_id = this.value;
-                    $.post('normering.php', {post_kerntaak: kerntaak_id});
-                    //alert(kerntaak_id);
-
+                    $.post('werkprocessen.php', {post_kerntaak: kerntaak_id});
                     $("tbody[name=tbody]").empty();
-
                     // ophalen van informatie, met ajax
                     $.ajax({
                         type: 'GET',
@@ -112,8 +259,8 @@ if (isset($_SESSION['session_kerntaak'])){
                             //console.log(data);
                             $.each(data, function (index, element) {
                                 $("#show_werkproces").find('tbody')
-                                    .append($('<tr>', {id: element.id})
-                                        .append($('<td>', {text: element.name},))
+                                    .append($('<tr>', {id: element.werkproces_id})
+                                        .append($('<td>', {text: element.werkproces_name},))
                                         .append($('<td><button data-target="ModalEditWerkproces" class="EditWerkproces btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'))
                                         .append($('<td><button data-target="ModalDeleteWerkproces" class="DeleteWerkproces btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'))
                                     );
@@ -170,15 +317,11 @@ if (isset($_SESSION['session_kerntaak'])){
                         }
                     });
                 });
-                <?php
-                if (isset($_SESSION['session_kerntaak'])){
-                ?>
+          <?php if (isset($_SESSION['session_kerntaak'])){ ?>
                     if (typeof(<?php echo $_SESSION['session_kerntaak']?>) !== "undefined"){
                         $("select[name=selected_kerntaak]").trigger('change');
                     }
-                <?php
-                }
-                ?>
+          <?php } ?>
             });
         </script>
     </body>
