@@ -79,9 +79,12 @@ if (isset($_SESSION['session_student'])){
                         <input name="search" style="background-color: white; width:100%; height: 25px;">
                     </div>
                 </div>
-
+                
+                <select name="selected_search_student" class="">
+                </select>
+                
             </div>
-            <div class="col s12 m8 l9" margin="0 auto">
+            <div style="overflow: scroll; height: 85%" class="col s12 m8 l9" margin="0 auto">
                 <h4>Resultaten en Beoordelen</h4>
                 <table>
                 <thead>
@@ -183,12 +186,76 @@ if (isset($_SESSION['session_student'])){
                 $("select[name=search]").on('change', function () {
                     search_term = this.value;
                     //alert(search_term);
+                    //hide door klas gekozen studentenlijst
+                    //un-hide de search studentenlijst
+                    //een knoppie met onclick JS functie die de query start? of iedere keypress een nieuwe query?
+                    //hoedanook die search SQL moet er komen
+                    //ook een .ajax blokje voor het interpreteren van de records
+                    
+                    $.post('resultaten.php', {post_search: search});
+                    // Student dropdown leeg maken:
+                    $("select[name=selected_search_student]").empty().append($('<option>', {
+                        value: 0,
+                        text: "Kies een student"
+                    }));
+                    // ophalen van studenten met ajax
+                    $.ajax({
+                        type: 'GET',
+                        url: 'json_show_student.php',
+                        data: {id: klas_id},
+                        dataType: 'json',
+                        success: function (data) {
+                            //alert(data);
+                            $.each(data, function (index, element) {
+                                //creer de content voor de dropdown menu voor studenten
+                                if ('<?php echo $session_student?>' === element.student_id){
+                                    $("select[name=selected_student]").append($('<option>', {
+                                        value: element.student_id,
+                                        text: element.student_name,
+                                        selected: 1
+                                    }));
+                                }
+                                else{
+                                    $("select[name=selected_student]").append($('<option>', {
+                                        value: element.student_id,
+                                        text: element.student_name
+                                    }));
+                                }
+                            });
+                            // toepassen css
+                            // ** material only! **
+                            $("select[name=selected_student]").material_select();
+                            // als alles is opgehaald. Select weer laten zien.
+                            $("select[name=selected_student]").closest('.select-wrapper').removeClass("hide");
+                            
+                            <?php //trigger het laten zien van de volgende lijst alleen als deze gevuld is. Wouter heeft hierbij geholpen.
+                            if (isset($_SESSION['session_student'])){
+                            ?>
+                                if (typeof(<?php echo $_SESSION['session_student']?>) !== "undefined"){
+                                    $("select[name=selected_student]").trigger('change');
+                                    //alert('jahoor');
+                                }
+                            <?php
+                            }
+                            ?>
+                        },
+                        error: function () {
+                            //drop menu content is leeg
+                        }
+                    });
                 });
+                
                 
                 //Selecteer student
                 $("select[name=selected_student]").on('change', function () {
                     student_id = this.value;
                     //alert(student_id);
+                    //selected_student heeft 2 versies.
+                    //(1)0klas  (2)search
+                    //hoe ga je deze schijden? met een extra select element?
+                    //hoedanook die dropdown heb je al.
+                    //het belangrijke is dat je de student kan selecteren, dat doe je hier.
+                    //nu nog een contentvlak recht van de sidebar waarje al de data v.d. student in moet proppen.
                 });
             });
         </script>

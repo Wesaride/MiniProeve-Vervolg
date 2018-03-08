@@ -42,7 +42,7 @@ include("connect.php");
 
                 </select>
             </div>
-            <div class="col s12 m8 l9">
+            <div style="overflow: scroll; height: 85%" class="col s12 m8 l9">
                 <h4>Overzicht studenten <a data-target="ModalAddStudent" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
                 <table id="show_student" class="hide">
                     <thead>

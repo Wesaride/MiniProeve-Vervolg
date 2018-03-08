@@ -1,6 +1,22 @@
 <?php
 include("check.php");
 include("connect.php");
+
+
+if (isset($_POST['post_cohort'])){
+    $_SESSION['session_cohort'] = $_POST['post_cohort'];
+}
+if (isset($_POST['post_proeve'])){
+    $_SESSION['session_proeve'] = $_POST['post_proeve'];
+}
+$session_cohort = $session_proeve = "";
+if (isset($_SESSION['session_cohort'])){
+    $session_cohort = $_SESSION['session_cohort'];
+}
+if (isset($_SESSION['session_proeve'])){
+    $session_proeve = $_SESSION['session_proeve'];
+}
+
 ?>
 <html>
     <head>
@@ -18,8 +34,43 @@ include("connect.php");
         include("ModalDeleteKerntaak.php");
         ?>
         <div class="row" style="margin-bottom: auto;">
-            <div class="col s12 m4 l3" style="background-color: gray; height: 100%;"></div>
-            <div class="col s12 m8 l9" margin="0 auto">
+            
+            <div class="col s12 m4 l3" style="background-color: gray; height: 100%;">
+                <?php
+                $session_cohort = "";
+                if (isset($_SESSION['session_cohort'])){
+                    $session_cohort = $_SESSION['session_cohort'];
+                }
+                $get_cohort = "SELECT * FROM cohort";
+                $result_cohort = $conn->query($get_cohort);
+                if ($result_cohort->num_rows > 0) {
+                    ?>
+                    <select name="selected_cohort" required>
+                        <?php
+                        if (isset($_SESSION['session_cohort'])){
+                            echo '<option disabled>Kies een cohort</option>';
+                        }
+                        else{
+                            echo "<option selected='selected' disabled>Kies een cohort</option>";
+                        }
+                        while ($row_cohort = $result_cohort->fetch_assoc()) {
+                            if (isset($_SESSION['session_cohort'])){
+                                if ($_SESSION['session_cohort'] == $row_cohort['cohort_id']){
+                                    $selectedvalue = "selected='selected'";
+                                }
+                                else{
+                                    $selectedvalue = "";
+                                }
+                            }
+                            echo "<option " . $selectedvalue . " value=" . $row_cohort['cohort_id'] . ">" . $row_cohort['cohort_jaar'] . "</option>";
+                        }
+                        ?>
+                    </select>
+                    <?php
+                }
+                ?>
+            </div>
+            <div style="overflow: scroll; height: 85%" class="col s12 m8 l9" margin="0 auto">
                 <h4>Overzicht kerntaken <a data-target="ModalAddKerntaak" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
                     <table>
                         <thead>

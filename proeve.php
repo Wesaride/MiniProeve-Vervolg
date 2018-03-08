@@ -60,7 +60,7 @@ if (isset($_SESSION['session_cohort'])){
                 }
                 ?>
             </div>
-            <div class="col s12 m8 l9">
+            <div class="col s12 m8 l9" style="overflow: scroll; height: 85%;">
                 <h4>Overzicht Proeve<a data-target="ModalAddProeve" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
                 <table id="show_proeve" class="hide">
                     <thead>
@@ -93,13 +93,13 @@ if (isset($_SESSION['session_cohort'])){
                 $('.modal-trigger').leanModal();
                 $('select').material_select();
                 $(".button-collapse").sideNav();
-                
+
                 $("select[name=selected_cohort]").on('change', function () {
                     proeve_id = this.value;
                     $.post('proeve.php', {post_cohort: proeve_id});
                     $("tbody[name=tbody]").empty();
                     // ophalen van informatie, met ajax
-                    
+
                     $.ajax({
                         type: 'GET',
                         url: 'json_show_proeve.php',
@@ -112,8 +112,8 @@ if (isset($_SESSION['session_cohort'])){
                                     .append($('<tr>', {id: element.proeve_id})
                                         .append($('<td>', {text: element.proeve_name}, ))
                                         .append($('<td>', {text: element.proeve_email}, ))
-                                        .append($('<td><button data-target="ModalEditproeve" class="Editproeve btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'))
-                                        .append($('<td><button data-target="ModalDeleteproeve" class="Deleteproeve btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'))
+                                        .append($('<td><button data-target="ModalEditProeve" class="Editproeve btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'))
+                                        .append($('<td><button data-target="ModalDeleteProeve" class="Deleteproeve btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'))
                                     );
                                 $("#show_proeve").removeClass("hide");
                                 if (!$("table[id=geen_resultaten]").hasClass("hide")){
