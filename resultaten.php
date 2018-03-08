@@ -96,10 +96,57 @@ if (isset($_SESSION['session_student'])){
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    ?>
                 </tbody>
                 </table>
+                <ul class="collapsible" data-collapsible="accordion">
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
+                        <div class="collapsible-body">
+                            <table>
+                            <thead>
+                                <tr>
+                                    <th>Proeve</th>
+                                </tr>
+                                <tr>
+                                    <th>Kerntaak</th>
+                                    <th>Werkproces</th>
+                                    <th>Criterium</th>
+                                    <th>Beoordeling</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>K1</th>
+                                    <th>W1</th>
+                                    <th>C1</th>
+                                    <th>Uitstekend</th>
+                                </tr>
+                                <tr>
+                                    <th>K1</th>
+                                    <th>W1</th>
+                                    <th>C1</th>
+                                    <th>
+                                        <ul id="menu">
+                                            <li><input type="radio" name="criterium1" id="html-item"><label for="html-item">1</label></li>
+                                            <li><input type="radio" name="criterium1" id="css-item"><label for="css-item">2</label></li>
+                                            <li><input type="radio" name="criterium1" id="js-item"><label for="js-item">3</label></li>
+                                            <li><input type="radio" name="criterium1" id="php-item"><label for="php-item">4</label></li>
+                                        </ul>
+                                    </th>
+                                </tr>
+                            </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li>
+                      <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
+                      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+                    </li>
+                    <li>
+                      <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
+                      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+                    </li>
+                    </ul>
             </div>
         </div>
 
