@@ -12,7 +12,7 @@ if (isset($_POST['post_kerntaak'])){
     $_SESSION['session_kerntaak'] = $_POST['post_kerntaak'];
 }
 
-$session_cohort = $session_proeve = $session_kerntaak = $session_werkproces = $session_criteria = "";
+$session_cohort = $session_proeve = $session_kerntaak = "";
 
 if (isset($_SESSION['session_cohort'])){
     $session_cohort = $_SESSION['session_cohort'];
@@ -43,10 +43,6 @@ if (isset($_SESSION['session_kerntaak'])){
             <div class="col s12 m4 l3" style="background-color: gray; height: 100%;">
                 <br>
                 <?php
-                $session_cohort = "";
-                if (isset($_SESSION['session_cohort'])){
-                    $session_cohort = $_SESSION['session_cohort'];
-                }
                 $get_cohort = "SELECT * FROM cohort";
                 $result_cohort = $conn->query($get_cohort);
                 if ($result_cohort->num_rows > 0) {
@@ -60,12 +56,10 @@ if (isset($_SESSION['session_kerntaak'])){
                             echo "<option selected='selected' disabled>Kies een cohort</option>";
                         }
                         while ($row_cohort = $result_cohort->fetch_assoc()) {
+                            $selectedvalue = "";
                             if (isset($_SESSION['session_cohort'])){
-                                if ($_SESSION['session_cohort'] == $row_kerntaak['cohort_id']){
+                                if ($_SESSION['session_cohort'] == $row_cohort['cohort_id']){
                                     $selectedvalue = "selected='selected'";
-                                }
-                                else{
-                                    $selectedvalue = "";
                                 }
                             }
                             echo "<option " . $selectedvalue . " value=" . $row_cohort['cohort_id'] . ">" . $row_cohort['cohort_jaar'] . "</option>";
@@ -75,6 +69,8 @@ if (isset($_SESSION['session_kerntaak'])){
                     <?php
                 }
                 ?>
+                <select name="selected_proeve" class="hide"></select>
+                <select name="selected_kerntaak" class="hide"></select>
             </div>
             <div style="overflow: scroll; height: 85%" class="col s12 m8 l9">
                 
@@ -115,6 +111,11 @@ if (isset($_SESSION['session_kerntaak'])){
                 $("select[name=selected_cohort]").on('change', function () {
                     cohort_id = this.value;
                     $.post('werkprocessen.php',{post_cohort: cohort_id});
+                    alert(cohort_id);
+                    $("select[name=selected_proeve]").empty().append($('<option>', {
+                        value: 0,
+                        text: "Kies een proeve"
+                    }));
                     
                     $.ajax({
                         type: 'GET',
@@ -173,11 +174,22 @@ if (isset($_SESSION['session_kerntaak'])){
                         }
                     });
                 });
+            //
+          <?php if (isset($_SESSION['session_cohort'])){ ?>
+                    if (typeof(<?php echo $_SESSION['session_cohort']?>) !== "undefined"){
+                        $("select[name=selected_cohort]").trigger('change');
+                    }
+          <?php } ?>
                 
                 //select dropdown proeve, show kerntaken
                 $("select[name=selected_proeve]").on('change', function () {
                     proeve_id = this.value;
                     $.post('werkprocessen.php',{post_proeve: proeve_id});
+                    
+                    $("select[name=selected_kerntaak]").empty().append($('<option>', {
+                        value: 0,
+                        text: "Kies een kerntaak"
+                    }));
                     
                     $.ajax({
                         type: 'GET',
@@ -248,8 +260,8 @@ if (isset($_SESSION['session_kerntaak'])){
                             //console.log(data);
                             $.each(data, function (index, element) {
                                 $("#show_werkproces").find('tbody')
-                                    .append($('<tr>', {id: element.id})
-                                        .append($('<td>', {text: element.name},))
+                                    .append($('<tr>', {id: element.werkproces_id})
+                                        .append($('<td>', {text: element.werkproces_name},))
                                         .append($('<td><button data-target="ModalEditWerkproces" class="EditWerkproces btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'))
                                         .append($('<td><button data-target="ModalDeleteWerkproces" class="DeleteWerkproces btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'))
                                     );

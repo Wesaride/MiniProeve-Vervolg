@@ -1,8 +1,8 @@
 <?php
 include 'connect.php';
-$get_proeve_id = $_GET['id'];
+$get_cohort_id = $_GET['id'];
 //echo $get_cohort_id;
-$get_proeve = "SELECT proeve_id, proeve_naam FROM proeve WHERE cohort_id = '" . $get_proeve_id . "'";
+$get_proeve = "SELECT proeve_id, proeve_naam FROM proeve WHERE cohort_id = $get_cohort_id";
 //echo $get_klas;
 $result_proeve = $conn->query($get_proeve);
 if ($result_proeve->num_rows > 0) {
