@@ -26,7 +26,7 @@
             }
             ?>
             <input type="hidden" class="form-control" style="border-radius: 0;" name="proeve_id" id="proeve_id">
-            <input type="text" class="form-control hide" style="border-radius: 0;" name="proeve_naam" id="proeve_naam" placeholder="Proeve naam">
+            <input type="text" class="form-control" style="border-radius: 0;" name="proeve_naam" id="proeve_naam" placeholder="Proeve naam">
             <button type="submit" name="edit_proeve_submit" class="btn btn-success" value="Opslaan">Opslaan</button>
             <a href="#!" class="modal-action modal-close waves-effect waves-green btn btn-success ">Sluiten</a>
         </form>
@@ -38,7 +38,7 @@ if (isset($_POST['edit_proeve_submit'])){
         if (isset($_POST['proeve_naam'])){
             $edit_cohort_id = $_POST['selected_cohort'];
             $edit_proeve_naam = $_POST['proeve_naam'];
-            $edit_proeve_sql = "UPDATE proeve SET proeve_naam='$edit_proeve_naam', cohort_id'$edit_cohort_id' WHERE proeve_naam = $edit_proeve_naam, cohort_id = $edit_cohort_id";
+            $edit_proeve_sql = "UPDATE proeve SET proeve_naam = '$edit_proeve_naam', cohort_id = '$edit_cohort_id' WHERE proeve_naam = $edit_proeve_naam, cohort_id = $edit_cohort_id";
             // $edit_proeve = "UPDATE proeve SET proeve_naam='$edit_proeve_naam' WHERE proeve_id = $edit_proeve_id";
             echo "<meta http-equiv='refresh' content='0'>";
             if ($conn->query($edit_proeve_sql) === TRUE) {
@@ -47,11 +47,8 @@ if (isset($_POST['edit_proeve_submit'])){
                 echo "FOUTMELDING! Probeer opnieuw";
             }
         }
-    }  else {
-    $error = 'Foutmelding, selecteer een kerntaak';
     }
 }
-
 if (!empty($error)){
     echo $error;
 }
