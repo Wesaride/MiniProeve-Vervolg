@@ -2,6 +2,19 @@
 include("check.php");
 include("connect.php");
 
+//$_SESSION['session_cohort'] = 1;
+//$_SESSION['session_proeve'] = 1;
+//$_SESSION['session_kerntaak'] = 1;
+//$_SESSION['session_werkproces'] = 1;
+//$_SESSION['session_criteria'] = 1;
+        
+        
+if (isset($_POST['post_cohort'])){
+    $_SESSION['session_cohort'] = $_POST['post_cohort'];
+}
+if (isset($_POST['post_proeve'])){
+    $_SESSION['session_proeve'] = $_POST['post_proeve'];
+}
 if (isset($_POST['post_kerntaak'])){
     $_SESSION['session_kerntaak'] = $_POST['post_kerntaak'];
 }
@@ -11,8 +24,18 @@ if (isset($_POST['post_werkproces'])){
 if (isset($_POST['post_criteria'])){
     $_SESSION['session_criteria'] = $_POST['post_criteria'];
 }
+//voor het resetten van een session
+//$_SESSION['session_cohort'] = $_POST['1'];
+
 //bereid session locals voor
-$session_kerntaak = $session_werkproces = $session_criteria = "";
+$session_cohort = $session_proeve = $session_kerntaak = $session_werkproces = $session_criteria = "";
+
+if (isset($_SESSION['session_cohort'])){
+    $session_cohort = $_SESSION['session_cohort'];
+}
+if (isset($_SESSION['session_proeve'])){
+    $session_proeve = $_SESSION['session_proeve'];
+}
 if (isset($_SESSION['session_kerntaak'])){
     $session_kerntaak = $_SESSION['session_kerntaak'];
 }
@@ -42,32 +65,38 @@ if (isset($_SESSION['session_criteria'])){
             <div class="col s12 m4 l3 sidebar">
                 <br />
                 <?php
-                $get_kerntaak = "SELECT * FROM kerntaak";
-                $result_kerntaak = $conn->query($get_kerntaak);
-                if ($result_kerntaak->num_rows > 0) {
+                $get_cohort = "SELECT * FROM cohort";
+                $result_cohort = $conn->query($get_cohort);
+                if ($result_cohort->num_rows > 0) {
                     ?>
-                    <select name="selected_kerntaak" required>
+                    <select name="selected_cohort" required>
                         <?php
-                        if (isset($_SESSION['session_kerntaak'])){
-                            echo '<option disabled>Kies een kerntaak</option>';
+                        if (isset($_SESSION['session_cohort'])){
+                            echo '<option disabled>Kies een cohort</option>';
                         }
                         else{
-                            echo "<option selected='selected' disabled>Kies een kerntaak</option>";
+                            echo "<option selected='selected' disabled>Kies een cohort</option>";
                         }
-                        while ($row_kerntaak = $result_kerntaak->fetch_assoc()) {
+                        while ($row_cohort = $result_cohort->fetch_assoc()) {
                             $selectedvalue = "";
-                            if (isset($_SESSION['session_kerntaak'])){
-                                if ($_SESSION['session_kerntaak'] == $row_kerntaak['kerntaak_id']){
+                            if (isset($_SESSION['session_cohort'])){
+                                if ($_SESSION['session_cohort'] == $row_cohort['cohort_id']){
                                     $selectedvalue = "selected='selected'";
                                 }
                             }
-                            echo "<option " . $selectedvalue . " value=" . $row_kerntaak['kerntaak_id'] . ">" . $row_kerntaak['kerntaak_naam'] . "</option>";
+                            echo "<option " . $selectedvalue . " value=" . $row_cohort['cohort_id'] . ">" . $row_cohort['cohort_jaar'] . "</option>";
                         }
                         ?>
                     </select>
                     <?php
                 }
                 ?>
+                <select name="selected_cohort" class="hide">
+
+                </select>
+                <select name="selected_proeve" class="hide">
+
+                </select>
                 <select name="selected_werkproces" class="hide">
 
                 </select>
@@ -78,26 +107,26 @@ if (isset($_SESSION['session_criteria'])){
             <div class="col s12 m8 l9">
                 <h4>Overzicht normeringen <a data-target="ModalAddNormering" class="btn-floating btn-small waves-effect waves-light green btn modal-trigger"><i class="material-icons" >add</i></a></h4>
                 <?php
-//                if (isset($_SESSION['session_cohort'])){
-//                    echo $_SESSION['session_cohort'];
-//                    
-//                }
-//                if (isset($_SESSION['session_proeve'])){
-//                    echo $_SESSION['session_proeve'];
-//                    
-//                }
-//                if (isset($_SESSION['session_kerntaak'])){
-//                    echo $_SESSION['session_kerntaak'];
-//                    
-//                }
-//                if (isset($_SESSION['session_werkproces'])){
-//                    echo $_SESSION['session_werkproces'];
-//                    
-//                }
-//                if (isset($_SESSION['session_criteria'])){
-//                    echo $_SESSION['session_criteria'];
-//                    
-//                }
+                if (isset($_SESSION['session_cohort'])){
+                    echo "A" . $_SESSION['session_cohort'];
+                    
+                }
+                if (isset($_SESSION['session_proeve'])){
+                    echo "B" . $_SESSION['session_proeve'];
+                    
+                }
+                if (isset($_SESSION['session_kerntaak'])){
+                    echo "C" . $_SESSION['session_kerntaak'];
+                    
+                }
+                if (isset($_SESSION['session_werkproces'])){
+                    echo "D" . $_SESSION['session_werkproces'];
+                    
+                }
+                if (isset($_SESSION['session_criteria'])){
+                    echo "E" . $_SESSION['session_criteria'];
+                    
+                }
                 ?>
                 <table id="show_normering" class="hide">
                     <thead>
@@ -129,8 +158,192 @@ if (isset($_SESSION['session_criteria'])){
                 $(".modal-trigger").leanModal();
                 $("select").material_select();
                 $(".button-collapse").sideNav();
-                //alert(  );
-                            
+                
+                //cohort is geselecteerd. Zoek proeven.
+                $("select[name=selected_cohort]").on('change', function () {
+                    // waarde van geslecteerde id ophalen
+                    cohort_id = this.value;
+                    $.post('normering.php', {post_cohort: cohort_id});
+                    alert(cohort_id);
+                    // Werkproces leeg maken:
+                    $("select[name=selected_proeve]").empty().append($('<option>', {
+                        value: 0,
+                        text: "Kies een proeve"
+                    }));
+                    // ophalen van werkprocessen, met ajax
+                    alert("a");
+                    $.ajax({
+                        type: 'GET',
+                        url: 'json_show_proeve.php',
+                        data: {id: cohort_id},
+                        dataType: 'json',
+                        success: function (data) {
+                            //alert(data);
+                            alert("b");
+                            $.each(data, function (index, element) {
+                                //console.log(element.name);
+                                //alert(element.id);
+                                //creer de content voor de dropdown menu voor proeves
+                                if ('<?php echo $session_proeve?>' === element.proeve_id){
+                                    $("select[name=selected_proeve]").append($('<option>', {
+                                        value: element.proeve_id,
+                                        text: element.proeve_name,
+                                        selected: 1
+                                    }));
+                                }
+                                else{
+                                    $("select[name=selected_proeve]").append($('<option>', {
+                                        value: element.proeve_id,
+                                        text: element.proeve_name
+                                    }));
+                                }
+                            });
+                            // toepassen css
+                            // ** material only! **
+                            $("select[name=selected_werkproces]").material_select();
+                            $("select[name=selected_kerntaak]").material_select();
+                            // als alles is opgehaald. Select weer laten zien.
+                            $("select[name=selected_proeve]").closest('.select-wrapper').removeClass("hide");
+                            if (!$("table[id=geen_resultaten]").hasClass("hide")){
+                                //als het "geen resultaten" scherm bestaat. Verstop het.
+                                $("table[id=geen_resultaten]").addClass("hide");
+                            }
+                            //trigger het laten zien van de volgende lijst alleen als deze gevuld is. Wouter heeft hierbij geholpen.
+                            <?php
+                            if (isset($_SESSION['session_proeve'])){
+                            ?>
+                                if (typeof(<?php echo $_SESSION['session_proeve']?>) !== "undefined"){
+                                    $("select[name=selected_proeve]").trigger('change');
+                                }
+                            <?php
+                            }
+                            ?>
+                            alert("c");
+                        },
+                        error: function () {
+                            //drop menu content is leeg
+                            //alert('error');
+                            //laat zien op de pagina dat er geen resultaten zijn
+                            if (!$("table[id=show_normering]").hasClass("hide")){
+                                //haalt overzicht normering weg
+                                $("table[id=show_normering]").addClass("hide");
+                            }
+                            $("table[id=geen_resultaten]").removeClass("hide");
+                            //hide de andere dropdown menus
+                            if (!$("select[name=selected_proeve]").closest('.select-wrapper').hasClass("hide")){
+                                $("select[name=selected_proeve]").closest('.select-wrapper').addClass("hide");
+                            }
+                            if (!$("select[name=selected_kerntaak]").closest('.select-wrapper').hasClass("hide")){
+                                $("select[name=selected_kerntaak]").closest('.select-wrapper').addClass("hide");
+                            }
+                            if (!$("select[name=selected_werkproces]").closest('.select-wrapper').hasClass("hide")){
+                                $("select[name=selected_werkproces]").closest('.select-wrapper').addClass("hide");
+                            }
+                            if (!$("select[name=selected_criteria]").closest('.select-wrapper').hasClass("hide")){
+                                $("select[name=selected_criteria]").closest('.select-wrapper').addClass("hide");
+                            }
+                            alert("d");
+                        }
+                    });
+                    if (!$("table[id=show_normering]").hasClass("hide")){
+                        //haalt overzicht normering weg
+                        $("table[id=show_normering]").addClass("hide");
+                    }
+                });
+                //trigger het laten zien van de eerste lijst met de change function.
+                <?php
+                if (isset($_SESSION['session_cohort'])){
+                ?>
+                    if (typeof(<?php echo $_SESSION['session_cohort']?>) !== "undefined"){
+                        $("select[name=selected_cohort]").trigger('change');
+                    }
+                <?php
+                }
+                ?>
+                
+                //proeve is geselecteerd. Zoek werkprocessen.
+                $("select[name=selected_proeve]").on('change', function () {
+                    // waarde van geslecteerde id ophalen
+                    proeve_id = this.value;
+                    $.post('normering.php', {post_proeve: proeve_id});
+                    // Werkproces leeg maken:
+                    $("select[name=selected_werkproces]").empty().append($('<option>', {
+                        value: 0,
+                        text: "Kies een werkproces"
+                    }));
+
+                    // ophalen van werkprocessen, met ajax
+                    $.ajax({
+                        type: 'GET',
+                        url: 'json_show_kerntaak.php',
+                        data: {id: proeve_id},
+                        dataType: 'json',
+                        success: function (data) {
+                            //alert(data);
+                            $.each(data, function (index, element) {
+                                //console.log(element.name);
+                                //alert(element.id);
+                                //creer de content voor de dropdown menu voor werkprocessen
+                                if ('<?php echo $session_kerntaak?>' === element.kerntaak_id){
+                                    $("select[name=selected_kerntaak]").append($('<option>', {
+                                        value: element.kerntaak_id,
+                                        text: element.kerntaak_name,
+                                        selected: 1
+                                    }));
+                                }
+                                else{
+                                    $("select[name=selected_kerntaak]").append($('<option>', {
+                                        value: element.kerntaak_id,
+                                        text: element.kerntaak_name
+                                    }));
+                                }
+                            });
+                            // toepassen css
+                            // ** material only! **
+                            $("select[name=selected_werkproces]").material_select();
+                            $("select[name=selected_criteria]").material_select();
+                            // als alles is opgehaald. Select weer laten zien.
+                            $("select[name=selected_werkproces]").closest('.select-wrapper').removeClass("hide");
+                            if (!$("table[id=geen_resultaten]").hasClass("hide")){
+                                //als het "geen resultaten" scherm bestaat. Verstop het.
+                                $("table[id=geen_resultaten]").addClass("hide");
+                            }
+                            //trigger het laten zien van de volgende lijst alleen als deze gevuld is. Wouter heeft hierbij geholpen.
+                            <?php
+                            if (isset($_SESSION['session_kerntaak'])){
+                            ?>
+                                if (typeof(<?php echo $_SESSION['session_kerntaak']?>) !== "undefined"){
+                                    $("select[name=selected_kerntaak]").trigger('change');
+                                    //alert("a");
+                                }
+                            <?php
+                            }
+                            ?>
+                        },
+                        error: function () {
+                            //drop menu content is leeg
+                            //alert('error');
+                            //laat zien op de pagina dat er geen resultaten zijn
+                            if (!$("table[id=show_normering]").hasClass("hide")){
+                                //haalt overzicht normering weg
+                                $("table[id=show_normering]").addClass("hide");
+                            }
+                            $("table[id=geen_resultaten]").removeClass("hide");
+                            //hide de andere dropdown menus
+                            if (!$("select[name=selected_werkproces]").closest('.select-wrapper').hasClass("hide")){
+                                $("select[name=selected_werkproces]").closest('.select-wrapper').addClass("hide");
+                            }
+                            if (!$("select[name=selected_criteria]").closest('.select-wrapper').hasClass("hide")){
+                                $("select[name=selected_criteria]").closest('.select-wrapper').addClass("hide");
+                            }
+                        }
+                    });
+                    if (!$("table[id=show_normering]").hasClass("hide")){
+                        //haalt overzicht normering weg
+                        $("table[id=show_normering]").addClass("hide");
+                    }
+                });
+                
                 //kerntaak is geselecteerd. Zoek werkprocessen.
                 $("select[name=selected_kerntaak]").on('change', function () {
                     // waarde van geslecteerde id ophalen
@@ -213,16 +426,6 @@ if (isset($_SESSION['session_criteria'])){
                         $("table[id=show_normering]").addClass("hide");
                     }
                 });
-                //trigger het laten zien van de eerste lijst met de change function.
-                <?php
-                if (isset($_SESSION['session_kerntaak'])){
-                ?>
-                    if (typeof(<?php echo $_SESSION['session_kerntaak']?>) !== "undefined"){
-                        $("select[name=selected_kerntaak]").trigger('change');
-                    }
-                <?php
-                }
-                ?>
                 //werkproces is geselecteerd. Zoek criteria.
                 $("select[name=selected_werkproces]").on("change", function () {
                     
