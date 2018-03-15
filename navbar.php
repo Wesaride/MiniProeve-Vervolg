@@ -1,3 +1,6 @@
+<?php
+//TODO er moet een extra optie komen voor cohort. De tab moet het aantal bestaande cohorts weergeven en geeft opties om ze te veranderen/verwijderen
+?>
 <nav>
     <div class="grey darken-4 nav-wrapper">
         <a href="index.php" class="brand-logo" style="padding-left: 11.25px;">Mini Proeve van Bekwaamheid</a>

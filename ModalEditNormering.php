@@ -1,3 +1,6 @@
+<?php
+//TODO, aanpassen zodat de edit button resultaten weergeeft, momenteel geeft het niks weer
+?>
 <div id="ModalEditNormering" class="modal">
     <div class="modal-header" style="padding-left: 24px;">
         <h5> Bewerken</h5>
@@ -13,6 +16,7 @@
     </div>
 </div>
 <?php
+
 if (isset($_POST["edit_normering_submit"])) {
     if (isset($_POST["normering_naam"])) {
         $edit_normering_id = $_POST["normering_id"];

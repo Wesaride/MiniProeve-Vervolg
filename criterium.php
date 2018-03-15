@@ -1,4 +1,5 @@
 <?php
+//TODO heeft dropdown menus voor cohort en proeve nodig
 include("check.php");
 include("connect.php");
 

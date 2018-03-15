@@ -1,4 +1,5 @@
 <?php
+//TODO cohort toevoegen buttom moet zijn eigen tab worden in de navbar
 include("check.php");
 include("connect.php");
 ?>

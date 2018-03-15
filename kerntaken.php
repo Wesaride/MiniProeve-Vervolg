@@ -1,4 +1,5 @@
 <?php
+//TODO heeft dropdown menu voor proeve nodig
 include("check.php");
 include("connect.php");
 
