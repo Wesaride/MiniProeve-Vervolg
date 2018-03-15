@@ -110,7 +110,6 @@ if (isset($_SESSION['session_kerntaak'])){
                 $("select[name=selected_cohort]").on('change', function () {
                     cohort_id = this.value;
                     $.post('werkprocessen.php',{post_cohort: cohort_id});
-                    //alert(cohort_id);
                     $("select[name=selected_proeve]").empty().append($('<option>', {
                         value: 0,
                         text: "Kies een proeve"
