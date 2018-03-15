@@ -95,58 +95,54 @@ if (isset($_SESSION['session_student'])){
                         <th>OV-Nummer</th>
                     </tr>
                 </thead>
-                <tbody>
-                </tbody>
                 </table>
-                <ul class="collapsible" data-collapsible="accordion">
-                    <li>
-                        <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
+                <ul name="resultaten_content" id="content" class="collapsible" data-collapsible="accordion"></ul>
+                
+                <!--voorbeeld collapsibles voor resultatenoverzicht-->
+                <ul class="collapsible" data-collapsible="accordion"><!--listgroup-->
+                    <li><!--collapsible listelement-->
+                        <div class="collapsible-header">First</div>
                         <div class="collapsible-body">
-                            <table>
-                            <thead>
-                                <tr>
-                                    <th>Proeve</th>
-                                </tr>
-                                <tr>
-                                    <th>Kerntaak</th>
-                                    <th>Werkproces</th>
-                                    <th>Criterium</th>
-                                    <th>Beoordeling</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th>K1</th>
-                                    <th>W1</th>
-                                    <th>C1</th>
-                                    <th>Uitstekend</th>
-                                </tr>
-                                <tr>
-                                    <th>K1</th>
-                                    <th>W1</th>
-                                    <th>C1</th>
-                                    <th>
-                                        <ul id="menu">
-                                            <li><input type="radio" name="criterium1" id="html-item"><label for="html-item">1</label></li>
-                                            <li><input type="radio" name="criterium1" id="css-item"><label for="css-item">2</label></li>
-                                            <li><input type="radio" name="criterium1" id="js-item"><label for="js-item">3</label></li>
-                                            <li><input type="radio" name="criterium1" id="php-item"><label for="php-item">4</label></li>
-                                        </ul>
-                                    </th>
-                                </tr>
-                            </tbody>
-                            </table>
+                            <div class="fluid-container">
+                                <div class="row">
+                                    <div class="col s3">Kerntaak</div>
+                                    <div class="col s3">Werkproces</div>
+                                    <div class="col s2">Criterium</div>
+                                    <div class="col s1">
+                                        <div class="blue-grey darken-1 cardclick" data-criterium="3" data-id="1">
+                                            <div class="white-text">
+                                                <p>1</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col s1">
+                                        <div class="blue-grey darken-1 cardclick" data-criterium="3" data-id="2">
+                                            <div class="white-text">
+                                                <p>2</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col s1">
+                                        <div class="blue-grey darken-1 cardclick" data-criterium="3" data-id="3">
+                                            <div class="white-text">
+                                                <p>3</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col s1">
+                                        <div class="blue-grey darken-1 cardclick" data-criterium="3" data-id="4">
+                                            <div class="white-text">
+                                                <p>4</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </li>
-                    <li>
-                      <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
-                      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-                    </li>
-                    <li>
-                      <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-                      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-                    </li>
-                    </ul>
+                </ul>
             </div>
         </div>
 
@@ -292,17 +288,92 @@ if (isset($_SESSION['session_student'])){
                     });
                 });
                 
-                
-                //Selecteer student
+                //TODO: -Dit codeblok werkt niet. Genereer Resultatenoverzicht uit dataset. Zie wireframe en HTML.
+                //Selecteer student, show content
                 $("select[name=selected_student]").on('change', function () {
                     student_id = this.value;
-                    //alert(student_id);
-                    //selected_student heeft 2 versies.
-                    //(1)0klas  (2)search
-                    //hoe ga je deze schijden? met een extra select element?
-                    //hoedanook die dropdown heb je al.
-                    //het belangrijke is dat je de student kan selecteren, dat doe je hier.
-                    //nu nog een contentvlak recht van de sidebar waarje al de data v.d. student in moet proppen.
+                    //show student and show beoordelingen
+                    $.post('resultaten.php', {post_student: student_id});
+                    $("div[name=resultaten_content]").empty();
+                    $.ajax({
+                        type: 'GET',
+                        url: 'json_show_beoordelingen.php',
+                        data: {id: student_id},
+                        dataType: 'json',
+                        success: function (data) {
+                            lastproeve = lastkerntaak = lastwerkproces = "";
+                            writekerntaak = "";
+                            writewerkproces = "";
+                            content = "div[name=resultaten_content]";
+                            $.each(data, function (index, element) {
+                                //console.log(element.criterium_id, element.criterium_naam);
+                                //check new proeve
+                                if (lastproeve !== element.proeve_naam){
+                                    //start new proeve
+                                    $(content)
+                                        .append($('<li>')
+                                            .append($('<div>',{class: 'collapsible-header', text: element.proeve_naam}))
+                                            .append($('<div>',{class: 'collapsible-body'>}))
+                                                .append($('<div>',{class: 'fluid-container', id: element.proeve_naam}))
+                                        );
+                                    lastproeve = element.proeve_naam;
+                                }
+                                
+                                //check new kerntaak
+                                if (lastkerntaak !== element.kerntaak_naam) { writekerntaak = element.kerntaak_naam; } 
+                                else { lastkerntaak = element.kerntaak_naam; }
+                                //check new werkproces
+                                if (lastwerkproces !== element.werkproces_naam) { writewerkproces = element.werkproces_naam; } 
+                                else { lastwerkproces = element.werkproces_naam; }
+                                
+                                //append the entire row
+                                content = "#"+element.proeve_naam;
+                                $(content)
+                                    .append($('')
+//                                       TODO: bla
+                                    );
+                                
+                                $("div[name=resultaten_content]")
+                                    .append($('<tr>', {id: element.normering_id})
+                                        .append($('<td>', {text: element.normering_name},))
+                                        .append($('<td><button data-target="ModalEditNormering" name="EditNormering" class="EditNormering btn-floating btn-large waves-effect waves-light yellow btn modal-trigger2"><i class="material-icons" >edit</i></button>'))
+                                        .append($('<td><button data-target="ModalDeleteNormering" name="DeleteNormering" class="DeleteNormering btn-floating btn-large waves-effect waves-light red btn modal-trigger2"><i class="material-icons">delete</i></button>'))
+                                    );
+                                //$("select[name=criteria]").material_select();
+                                //$("select[name=selected_criteria]").show();
+                                if(!$("table[id=geen_resultaten]").hasClass("hide")){
+                                    $("table[id=geen_resultaten]").addClass("hide");
+                                }
+                                $("table[id=show_normering]").removeClass("hide");
+                            });
+                            $(".modal-trigger2").leanModal();
+                        },
+                        error: function () {
+                            if (!$("table[id=show_normering]").hasClass("hide")){
+                                //haalt overzicht normering weg
+                                $("table[id=show_normering]").addClass("hide");
+                            }
+                            $("table[id=geen_resultaten]").removeClass("hide");
+                        }
+                    });
+                });
+                
+                //click on a beoordelingbutton, change colors, update DB beoordeling
+                //TODO: update Beoordeling onclick
+                $('.cardclick').click(function() {
+                    // alert( $(this).data("id") );
+                    //alert( $("#ovnr").html() )
+                    //alert( $(this).data("criterium") );
+                    var criterium = $(this).data("criterium");
+
+                    $("[data-criterium]").each(function(){
+                        if (criterium === $(this).data('criterium')) {
+                            $(this).removeClass("green").addClass("blue-grey");
+                        }
+                    });
+
+                    $(this).removeClass("blue-grey").addClass("green");
+
                 });
             });
         </script>
