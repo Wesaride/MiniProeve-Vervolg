@@ -1,6 +1,7 @@
 <div id="ModalDeleteCriterium" class="modal">
     <div class="modal-header" style="padding-left: 24px;">
         <h5>Verwijderen</h5>
+        <!-- TODO : Zorg ervoor dat delete werkt -->
     </div>
     <div class="modal-content">
         Weet u zeker dat u dit record wilt verwijderen?<br><br>
