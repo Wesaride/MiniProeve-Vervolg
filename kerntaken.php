@@ -96,6 +96,7 @@ if (isset($_SESSION['session_proeve'])){
                                     }
                                 }
                                 ?>
+                                        
                         </tbody>
                     </table>
             </div>
