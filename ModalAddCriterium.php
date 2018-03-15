@@ -1,6 +1,7 @@
 <div id="ModalAddCriterium" class="modal" style="height:100%">
     <div class="modal-header" style="padding-left: 24px;">
         <h5>Criterium toevoegen</h5>
+        <!-- TODO :  dat het toevoegen werkt-->
     </div>
     <div class="modal-content">
         <!-- CODE VOOR CRITERIUM TOEVOEGEN BACK-END -->

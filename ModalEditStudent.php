@@ -1,6 +1,7 @@
 <div id="ModalEditStudent" class="modal">
     <div class="modal-header" style="padding-left: 24px;">
         <h5> Bewerken</h5>
+        <!-- TODO : Zorg ervoor dat wijzigingen werkt-->
     </div>
     <div class="modal-content">
         <form method="POST">
