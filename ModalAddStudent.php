@@ -1,6 +1,7 @@
 <div id="ModalAddStudent" class="modal">
     <div class="modal-header" style="padding-left: 24px;">
         <h5>Student toevoegen</h5>
+        <!-- TODO : Dat een student toegevoegd wordt aan de database en text velden voornaam, tussenvoegsel en achternaam -->
     </div>
     <div class="modal-content">
 
@@ -45,7 +46,7 @@
 <?php
 if (isset($_POST['NewStudentSubmit'])) {
     if (!empty($_POST['student_naam'] && $_POST['student_email'] && $_POST['klas_option'])) {
-        //echo "gezet";   
+        //echo "gezet";
         $student_name = $_POST['student_naam'];
         $student_email = $_POST['student_email'];
         $klas_option = $_POST['klas_option'];

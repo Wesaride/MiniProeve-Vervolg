@@ -1,6 +1,11 @@
 <div id="ModalAddNormering" class="modal" style="height:100%">
     <div class="modal-header" style="padding-left: 24px;">
         <h5>Normering toevoegen</h5>
+        <!-- TODO : Dropdown menu toevoegen zodat je de bijhorende cohort kan selecteren -->
+        <!-- TODO : Dropdown menu toevoegen zodat je de bijhorende proeve kan selecteren -->
+        <!-- TODO : Dropdown menu van Werkproces maken zodat je een Werkproces kan selecteren -->
+        <!-- TODO : Dropdown menu toevoegen zodat je de bijhorende criterium kan selecteren -->
+        <!-- TODO : Opslaan knop werkt zodat het wordt opgeslagen in de database -->
     </div>
     <div class="modal-content">
         <form method="POST">
@@ -56,7 +61,7 @@
                     }
                 }
             }
-            ?>       
+            ?>
             <!--EINDE CODE VOOR WERKPROCES TOEVOEGEN BACKEND + -->
 
     </div>
