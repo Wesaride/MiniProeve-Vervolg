@@ -1,4 +1,7 @@
 <?php
+
+//TODO : Bij alle json bestanden kijken of alle query's werken.
+
 include 'connect.php';
 
 $student = filter_var ( $_POST['student'], FILTER_SANITIZE_NUMBER_INT);

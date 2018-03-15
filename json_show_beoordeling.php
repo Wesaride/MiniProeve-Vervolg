@@ -2,6 +2,8 @@
 
 include("connect.php");
 
+//TODO : Bij alle json bestanden kijken of alle query's werken.
+
 $sql_beoordeling = "SELECT wp.werkproces_id, wp.werkproces_naam, wc.werkproces_criterium_id, wc.werkproces_criterium_naam FROM werkproces AS wp INNER JOIN werkproces_criterium AS wc ON wp.werkproces_id = wc.werkproces_id WHERE wp.kerntaak_id = 1";
 $get_kerntaak_id = $_GET['id'];
 
