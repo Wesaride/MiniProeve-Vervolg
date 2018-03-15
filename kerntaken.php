@@ -2,6 +2,11 @@
 include("check.php");
 include("connect.php");
 
+//TODO : - Cohort dropdown select
+//     :  if cohort selected
+//TODO : - Proeven dropdown
+//     :  if proef selected
+//TODO : - show all kerntaken from selected proef 
 
 if (isset($_POST['post_cohort'])){
     $_SESSION['session_cohort'] = $_POST['post_cohort'];

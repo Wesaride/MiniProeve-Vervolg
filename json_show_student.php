@@ -1,4 +1,7 @@
 <?php
+
+//TODO : Bij alle json bestanden kijken of alle query's werken.
+
 include 'connect.php';
 $get_klas_id = $_GET['id'];
 //echo $get_kerntaak_id;

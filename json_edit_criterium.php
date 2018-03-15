@@ -1,4 +1,7 @@
 <?php
+
+//TODO : Bij alle json bestanden kijken of alle query's werken.
+
 include 'connect.php';
 $edit_criterium_id = $_GET['id'];
 //echo 'id = ' . $edit_kerntaak_id;

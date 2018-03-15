@@ -1,4 +1,7 @@
 <?php
+
+//TODO : Bij alle json bestanden kijken of alle query's werken.
+
 include 'connect.php';
 $return[] = array();
 $edit_student_id = $_GET['id'];
