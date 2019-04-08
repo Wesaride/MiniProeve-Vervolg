@@ -1,7 +1,6 @@
 <div id="ModalAddKlas" class="modal">
     <div class="modal-header" style="padding-left: 24px;">
         <h5>Klas toevoegen</h5>
-        <!-- TODO : Dat een klas wordt toegevoegd aan de database -->
     </div>
     <div class="modal-content">
         <!-- CODE VOOR KLAS TOEVOEGEN BACK-END -->
@@ -51,7 +50,7 @@
         if (!empty($error)) {
             echo $error;
 
-        }
+        } 
         ?>
         <!--EINDE CODE VOOR KLAS TOEVOEGEN BACKEND -->
     </div>

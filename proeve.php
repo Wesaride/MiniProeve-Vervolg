@@ -50,10 +50,10 @@ if (isset($_SESSION['session_cohort'])){
                             }
                             echo "<option " . $selectedvalue . " value=" . $row_cohort['cohort_id'] . ">" . $row_cohort['cohort_jaar'] . "</option>";
                         }
-                       while ($row_cohort = $result_cohort->fetch_assoc()) {
+//                        while ($row_cohort = $result_cohort->fetch_assoc()) {
                             ?>
                             <?php
-                       }
+//                        }
                         ?>
                     </select>
                 <?php

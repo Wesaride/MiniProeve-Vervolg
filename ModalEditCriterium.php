@@ -1,7 +1,6 @@
 <div id="ModalEditCriterium" class="modal">
     <div class="modal-header" style="padding-left: 24px;">
         <h5> Bewerken</h5>
-        <!-- TODO : Zorg ervoor dat wijzigingen werkt-->
     </div>
     <form method="POST">
         <div class="modal-content">
